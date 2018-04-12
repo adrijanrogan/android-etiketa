@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Etiketa</string>
+    <string name="etiketa">Etiketa</string>
+    <string name="naslov">Naslov</string>
+    <string name="izvajalec">Izvajalec</string>
+    <string name="album">Album</string>
+    <string name="leto_izdaje">Leto izdaje</string>
+    <string name="shrani">Shrani</string>
+</resources>
