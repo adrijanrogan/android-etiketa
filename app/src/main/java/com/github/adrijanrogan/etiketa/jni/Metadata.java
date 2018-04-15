@@ -56,4 +56,32 @@ public class Metadata {
         bundle.putString("IMAGE_PATH", imagePath);
         return bundle;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public int getReleaseYear() {
+        return releaseYear;
+    }
+
+    public String getImageMimeType() {
+        return imageMimeType;
+    }
+
+    public byte[] getImageData() {
+        return imageData;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
 }

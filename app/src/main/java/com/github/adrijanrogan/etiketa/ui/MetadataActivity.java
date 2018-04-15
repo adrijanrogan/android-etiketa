@@ -3,6 +3,7 @@ package com.github.adrijanrogan.etiketa.ui;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +15,10 @@ import android.widget.Toast;
 
 import com.github.adrijanrogan.etiketa.R;
 import com.github.adrijanrogan.etiketa.jni.FlacWriter;
+import com.github.adrijanrogan.etiketa.jni.Metadata;
 import com.github.adrijanrogan.etiketa.jni.Mp3Writer;
+
+import java.io.ByteArrayOutputStream;
 
 public class MetadataActivity extends AppCompatActivity {
 
@@ -22,6 +26,9 @@ public class MetadataActivity extends AppCompatActivity {
     private String filename;
     private String imagePath;
     private Context context;
+
+    private String mimeType;
+    private boolean imageChanged;
 
     private String title, artist, album;
     private int year;
@@ -68,14 +75,38 @@ public class MetadataActivity extends AppCompatActivity {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (filename.endsWith(".mp3")) {
-                    Mp3Writer mp3Writer = new Mp3Writer();
-                } else if (filename.endsWith(".flac")) {
-                    FlacWriter flacWriter = new FlacWriter();
+                if (compareData()) {
+                    Metadata metadata = makeMetadata();
+                    if (filename.endsWith(".mp3")) {
+                        Mp3Writer mp3Writer = new Mp3Writer();
+                    } else if (filename.endsWith(".flac")) {
+                        FlacWriter flacWriter = new FlacWriter(filename);
+                        flacWriter.setMetadata(metadata);
+                    } else {
+                        Toast.makeText(context, "Interna napaka.", Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    Toast.makeText(context, "Interna napaka.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Nobeni podatki niso bili spremenjeni.",
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
+
+    private boolean compareData() {
+        return imageChanged || !titleEdit.getText().toString().equals(title) ||
+                !artistEdit.getText().toString().equals(artist) ||
+                !albumEdit.getText().toString().equals(album) ||
+                Integer.valueOf(yearEdit.getText().toString()) != year;
+    }
+
+    private Metadata makeMetadata() {
+        Bitmap image = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        byte[] imageData = outputStream.toByteArray();
+        return new Metadata(titleEdit.getText().toString(),
+                artistEdit.getText().toString(), albumEdit.getText().toString(),
+                Integer.valueOf(yearEdit.getText().toString()), mimeType, imageData);
     }
 }
