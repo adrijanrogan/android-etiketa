@@ -78,10 +78,13 @@ public class MetadataActivity extends AppCompatActivity {
                 if (compareData()) {
                     Metadata metadata = makeMetadata();
                     if (filename.endsWith(".mp3")) {
-                        Mp3Writer mp3Writer = new Mp3Writer();
+                        Mp3Writer mp3Writer = new Mp3Writer(filename);
+                        int s = mp3Writer.setMetadata(metadata);
+                        Toast.makeText(context, String.valueOf(s), Toast.LENGTH_LONG).show();
                     } else if (filename.endsWith(".flac")) {
                         FlacWriter flacWriter = new FlacWriter(filename);
-                        flacWriter.setMetadata(metadata);
+                        int s = flacWriter.setMetadata(metadata);
+                        Toast.makeText(context, String.valueOf(s), Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(context, "Interna napaka.", Toast.LENGTH_LONG).show();
                     }
@@ -94,19 +97,30 @@ public class MetadataActivity extends AppCompatActivity {
     }
 
     private boolean compareData() {
+        int newYear = 0;
+        if (!yearEdit.getText().toString().equals("")) {
+            newYear = Integer.valueOf(yearEdit.getText().toString());
+        }
         return imageChanged || !titleEdit.getText().toString().equals(title) ||
                 !artistEdit.getText().toString().equals(artist) ||
                 !albumEdit.getText().toString().equals(album) ||
-                Integer.valueOf(yearEdit.getText().toString()) != year;
+                newYear != year;
     }
 
     private Metadata makeMetadata() {
+        byte[] imageData = null;
         Bitmap image = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        byte[] imageData = outputStream.toByteArray();
+        if (image != null) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            imageData = outputStream.toByteArray();
+        }
+        int year = 0;
+        if (!yearEdit.getText().toString().equals("")) {
+            year = Integer.valueOf(yearEdit.getText().toString());
+        }
         return new Metadata(titleEdit.getText().toString(),
                 artistEdit.getText().toString(), albumEdit.getText().toString(),
-                Integer.valueOf(yearEdit.getText().toString()), mimeType, imageData);
+                year, "image/jpeg", imageData);
     }
 }

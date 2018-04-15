@@ -316,9 +316,10 @@ set(toolkit_SRCS
 )
 
 set(jni_SRCS
-  jni/mp3reader.cpp
   jni/flacreader.cpp
   jni/flacwriter.cpp
+  jni/mp3reader.cpp
+  jni/mp3writer.cpp
 )
 
 if(NOT WIN32)
