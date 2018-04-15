@@ -1,24 +1,20 @@
 #include <jni.h>
-#include <flac/flacfile.h>
-#include <ogg/xiphcomment.h>
-#include <flacpicture.h>
-
-namespace {
-    typedef TagLib::FLAC::PictureList::ConstIterator PictureConstIterator;
-}
+#include <mpegfile.h>
+#include <mpeg/id3v2/id3v2tag.h>
+#include <mpeg/id3v2/frames/attachedpictureframe.h>
 
 using namespace TagLib;
-using namespace FLAC;
-using namespace Ogg;
+using namespace MPEG;
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_com_github_adrijanrogan_etiketa_jni_FlacWriter_writeXiphComment(JNIEnv *env, jobject instance,
-                                                                     jstring filename,
-                                                                     jstring title, jstring artist,
-                                                                     jstring album, jint year,
-                                                                     jstring mimeType,
-                                                                     jbyteArray jArray) {
+Java_com_github_adrijanrogan_etiketa_jni_Mp3Writer_writeId3Tag(JNIEnv *env, jobject instance,
+                                                               jstring filename,
+                                                               jstring title, jstring artist,
+                                                               jstring album, jint year,
+                                                               jstring mimeType,
+                                                               jbyteArray jArray) {
+
     const char *filenameC = env->GetStringUTFChars(filename, 0);
     const char *titleC = env->GetStringUTFChars(title, 0);
     const char *artistC = env->GetStringUTFChars(artist, 0);
@@ -30,25 +26,24 @@ Java_com_github_adrijanrogan_etiketa_jni_FlacWriter_writeXiphComment(JNIEnv *env
         imageData = env->GetByteArrayElements(jArray, 0);
     }
 
-    FLAC::File file(filenameC, false, AudioProperties::Average);
+    MPEG::File file(filenameC, false, AudioProperties::Average);
 
     if (file.isValid()) {
-        XiphComment *tag = file.xiphComment(true);
-        FieldListMap fieldListMap = tag->fieldListMap();
-
+        Tag *tag = file.tag();
         tag->setTitle(titleC);
         tag->setArtist(artistC);
         tag->setAlbum(albumC);
         tag->setYear(static_cast<unsigned int>(year));
 
-        if (imageData != NULL) {
-            Picture *newPicture = new Picture();
+        if (file.ID3v2Tag(false) && imageData != NULL) {
+            TagLib::ID3v2::FrameList list = file.ID3v2Tag()->frameListMap()["APIC"];
+            list.clear();
             ByteVector *newPictureVector = new ByteVector;
             newPictureVector->setData(reinterpret_cast<const char *>(imageData));
-            newPicture->setMimeType(mimeTypeC);
-            newPicture->setData(*newPictureVector);
-            file.removePictures();
-            file.addPicture(newPicture);
+            auto* frame = new ID3v2::AttachedPictureFrame;
+            frame->setData(*newPictureVector);
+            frame->setMimeType(mimeTypeC);
+            list.append(frame);
         }
 
         // Ne smemo pozabiti shraniti sprememb!
