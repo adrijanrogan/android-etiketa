@@ -1,6 +1,8 @@
 package com.github.adrijanrogan.etiketa.ui;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -18,13 +20,17 @@ public class MetadataActivity extends AppCompatActivity {
 
     private Bundle metadata;
     private String filename;
+    private String imagePath;
     private Context context;
 
-    private ImageView image;
-    private EditText title;
-    private EditText artist;
-    private EditText album;
-    private EditText year;
+    private String title, artist, album;
+    private int year;
+
+    private ImageView imageView;
+    private EditText titleEdit;
+    private EditText artistEdit;
+    private EditText albumEdit;
+    private EditText yearEdit;
     private Button buttonSave;
 
     @Override
@@ -35,12 +41,29 @@ public class MetadataActivity extends AppCompatActivity {
         filename = getIntent().getStringExtra("FILENAME");
         context = this;
 
-        image = findViewById(R.id.image);
-        title = findViewById(R.id.text_title);
-        artist = findViewById(R.id.text_artist);
-        album = findViewById(R.id.text_album);
-        year = findViewById(R.id.text_year);
+        Bundle metadata = getIntent().getBundleExtra("METADATA");
+        imagePath = metadata.getString("IMAGE_PATH");
+        title = metadata.getString("TITLE");
+        artist = metadata.getString("ARTIST");
+        album = metadata.getString("ALBUM");
+        year = metadata.getInt("YEAR");
+
+        imageView = findViewById(R.id.image);
+        titleEdit = findViewById(R.id.text_title);
+        artistEdit = findViewById(R.id.text_artist);
+        albumEdit = findViewById(R.id.text_album);
+        yearEdit = findViewById(R.id.text_year);
         buttonSave = findViewById(R.id.button_save);
+
+        if (imagePath != null) {
+            Bitmap albumArt = BitmapFactory.decodeFile(imagePath);
+            imageView.setImageBitmap(albumArt);
+        }
+
+        titleEdit.setText(title);
+        artistEdit.setText(artist);
+        albumEdit.setText(album);
+        //yearEdit.setText(year);
 
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override

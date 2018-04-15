@@ -8,16 +8,17 @@ public class Mp3Reader {
 
     public Mp3Reader(@NonNull String filename) {
         this.filename = filename;
+        System.loadLibrary("taglib");
     }
 
-    public int getFieldCount() {
-        return getFieldCount(filename);
+    public int hasId3Tag() {
+        return hasId3Tag(filename);
     }
 
     public Metadata getMetadata() {
         return readId3Tag(filename);
     }
 
-    private native int getFieldCount(String filename);
+    private native int hasId3Tag(String filename);
     private native Metadata readId3Tag(String filename);
 }

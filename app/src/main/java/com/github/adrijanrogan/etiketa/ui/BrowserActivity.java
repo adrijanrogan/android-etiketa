@@ -124,30 +124,39 @@ public class BrowserActivity extends AppCompatActivity implements AdapterCallbac
     // Preveri, ce je glasbena datoteka. Ce je, odpre MetadataActivity za spreminjanje
     // metapodatkov.
     private void checkFile(File file) {
-        String filename = file.getName();
-        Toast.makeText(this, filename, Toast.LENGTH_LONG).show();
-        if (filename.endsWith(".mp3")) {
-            Mp3Reader mp3Reader = new Mp3Reader(filename);
-            Metadata metadata = mp3Reader.getMetadata();
-            Bundle bundle = metadata.toBundle();
-            Intent intent = new Intent(this, MetadataActivity.class);
-            intent.putExtra("METADATA", bundle);
-            intent.putExtra("FILENAME", filename);
-            startActivity(intent);
-        } else if (filename.endsWith(".flac")) {
-            FlacReader flacReader = new FlacReader(filename);
+        String path = file.getAbsolutePath();
+        if (path.endsWith(".mp3")) {
+            Mp3Reader mp3Reader = new Mp3Reader(path);
+            switch (mp3Reader.hasId3Tag()) {
+                case 0:
+                    Toast.makeText(this, "Te datoteke ni bilo možno prebrati.", Toast.LENGTH_LONG).show();
+                    break;
+                case 1:
+                case 2:
+                    Metadata metadata = mp3Reader.getMetadata();
+                    metadata.writeImageToDisk(this);
+                    Bundle bundle = metadata.toBundle();
+                    Intent intent = new Intent(this, MetadataActivity.class);
+                    intent.putExtra("METADATA", bundle);
+                    intent.putExtra("FILENAME", path);
+                    startActivity(intent);
+            }
+
+        } else if (path.endsWith(".flac")) {
+            FlacReader flacReader = new FlacReader(path);
             if (!flacReader.hasXiphComment()) {
-                Toast.makeText(this, "Datoteke ni bilo možno prebrati", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Te datoteke ni bilo možno prebrati.", Toast.LENGTH_LONG).show();
             } else {
                 Metadata metadata = flacReader.getMetadata();
+                metadata.writeImageToDisk(this);
                 Bundle bundle = metadata.toBundle();
                 Intent intent = new Intent(this, MetadataActivity.class);
                 intent.putExtra("METADATA", bundle);
-                intent.putExtra("FILENAME", filename);
+                intent.putExtra("FILENAME", path);
                 startActivity(intent);
             }
         } else {
-            //Toast.makeText(this, "Format te datoteke ni podprt.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Format te datoteke ni podprt.", Toast.LENGTH_LONG).show();
         }
     }
 }
