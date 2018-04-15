@@ -29,49 +29,69 @@
             android:id="@+id/text_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/naslov"
             android:inputType="text" />
 
     </android.support.design.widget.TextInputLayout>
 
-    <EditText
-        android:id="@+id/text_artist"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/text_artist_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:hint="@string/izvajalec"
-        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_title_wrapper" />
+        app:layout_constraintTop_toBottomOf="@id/text_title_wrapper">
 
-    <EditText
-        android:id="@+id/text_album"
+        <EditText
+            android:id="@+id/text_artist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/text_album_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:hint="@string/album"
-        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_artist" />
+        app:layout_constraintTop_toBottomOf="@id/text_artist_wrapper">
 
-    <EditText
-        android:id="@+id/text_year"
+        <EditText
+            android:id="@+id/text_album"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/text_year_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:hint="@string/leto_izdaje"
-        android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_album" />
+        app:layout_constraintTop_toBottomOf="@id/text_album_wrapper">
+
+        <EditText
+            android:id="@+id/text_year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/button_save"
@@ -80,6 +100,6 @@
         android:layout_marginTop="16dp"
         android:text="@string/shrani"
         android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@id/text_year" />
+        app:layout_constraintTop_toBottomOf="@id/text_year_wrapper" />
 
 </android.support.constraint.ConstraintLayout>
