@@ -1,6 +1,13 @@
 package com.github.adrijanrogan.etiketa.jni;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 // Razred, ki vsebuje metapodatke o glasbenih datotekah.
 public class Metadata {
@@ -12,6 +19,7 @@ public class Metadata {
 
     private String imageMimeType; // MIME tip slike.
     private byte[] imageData; // Podatki slike.
+    private String imagePath;
 
     public Metadata(String title, String artist, String album, int releaseYear,
                     String imageMimeType, byte[] imageData) {
@@ -23,6 +31,21 @@ public class Metadata {
         this.imageData = imageData;
     }
 
+    public void writeImageToDisk(Context context) {
+        if (imageData != null) {
+            File folder = context.getDir("pictures", Context.MODE_PRIVATE);
+            File image = new File(folder, title + artist);
+            try {
+                FileOutputStream stream = new FileOutputStream(image);
+                stream.write(imageData);
+                imagePath = image.getAbsolutePath();
+                stream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putString("TITLE", title);
@@ -30,7 +53,7 @@ public class Metadata {
         bundle.putString("ALBUM", album);
         bundle.putInt("YEAR", releaseYear);
         bundle.putString("IMAGE_MIME", imageMimeType);
-        bundle.putByteArray("IMAGE_DATA", imageData);
+        bundle.putString("IMAGE_PATH", imagePath);
         return bundle;
     }
 }

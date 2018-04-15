@@ -10,6 +10,7 @@ using namespace TagLib;
 using namespace FLAC;
 using namespace Ogg;
 
+extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_github_adrijanrogan_etiketa_jni_FlacReader_readXiphComment(JNIEnv *env, jobject instance,
                                                                     jstring filename_) {
@@ -19,7 +20,7 @@ Java_com_github_adrijanrogan_etiketa_jni_FlacReader_readXiphComment(JNIEnv *env,
     jclass clazz = env->FindClass("com/github/adrijanrogan/etiketa/jni/Metadata");
     jmethodID methodId = env->
             GetMethodID(clazz, "<init>",
-                        "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I[BLjava/lang/String;)V");
+                        "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;[B)V");
 
     std::string titleC;
     std::string artistC;
@@ -61,7 +62,7 @@ Java_com_github_adrijanrogan_etiketa_jni_FlacReader_readXiphComment(JNIEnv *env,
             year = string.toInt();
         }
 
-        List<Picture *> pictureList = tag->pictureList();
+        const List<Picture*>& pictureList = file.pictureList();
         if (!pictureList.isEmpty()) {
             Picture *picture = pictureList[0];
             if (picture->data().size() != 0) {
@@ -92,9 +93,8 @@ Java_com_github_adrijanrogan_etiketa_jni_FlacReader_readXiphComment(JNIEnv *env,
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_github_adrijanrogan_etiketa_jni_FlacReader_hasXiphComment__Ljava_lang_String_2(JNIEnv *env,
-                                                                                        jobject instance,
-                                                                                        jstring filename_) {
+Java_com_github_adrijanrogan_etiketa_jni_FlacReader_hasXiphComment(JNIEnv *env, jobject instance,
+                                                                   jstring filename_) {
     const char *filename = env->GetStringUTFChars(filename_, 0);
 
     FLAC::File file(filename, false, AudioProperties::Average);
