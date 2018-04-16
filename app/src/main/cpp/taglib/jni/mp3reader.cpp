@@ -58,12 +58,14 @@ Java_com_github_adrijanrogan_etiketa_jni_Mp3Reader_readId3Tag(JNIEnv *env, jobje
         if (file.ID3v2Tag(false)) {
             const TagLib::ID3v2::FrameList& list = file.ID3v2Tag()->frameListMap()["APIC"];
             if (!list.isEmpty()) {
-                const auto* frame = (ID3v2::AttachedPictureFrame*)list.front();
-                mimeType = frame->mimeType().toCString(true);
-                ByteVector pictureData = frame->picture().data();
-                char *rawData = pictureData.data();
-                imageData_ = env->NewByteArray(pictureData.size());
-                env->SetByteArrayRegion(imageData_, 0, pictureData.size(), (const jbyte *) rawData);
+                ID3v2::AttachedPictureFrame* apic = dynamic_cast<ID3v2::AttachedPictureFrame*>
+                    (list.front());
+                mimeType = apic->mimeType().toCString(true);
+                const ByteVector picture = apic->picture();
+                const char *pictureData = picture.data();
+                const unsigned pictureSize = picture.size();
+                imageData_ = env->NewByteArray(pictureSize);
+                env->SetByteArrayRegion(imageData_, 0, pictureSize, (const jbyte *) pictureData);
             }
         }
     }

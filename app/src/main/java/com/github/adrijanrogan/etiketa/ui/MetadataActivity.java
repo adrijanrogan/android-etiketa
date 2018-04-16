@@ -75,22 +75,33 @@ public class MetadataActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(filename);
         }
 
-        // Vstavimo sliko, ce obstaja. Sicer skrijemo
+        // Vstavimo sliko, ce obstaja. Sicer skrijemo sliko in zapisemo razlog.
         if (imagePath != null) {
+/*            Toast.makeText(this, "image path = " + imagePath,
+                    Toast.LENGTH_SHORT).show();*/
             imageView.setVisibility(View.VISIBLE);
             Bitmap albumArt = BitmapFactory.decodeFile(imagePath);
             imageView.setImageBitmap(albumArt);
         } else if (filename.endsWith(".mp3") && metadata.getInt("ID3") == 1) {
-            TextView oldId3 = findViewById(R.id.text_id3_old);
+/*            Toast.makeText(this, "id3 version 1", Toast.LENGTH_LONG).show();*/
+            TextView textImage = findViewById(R.id.text_image);
+            textImage.setText(R.string.id3_starejsi_format);
             imageView.setVisibility(View.GONE);
-            oldId3.setVisibility(View.VISIBLE);
+            textImage.setVisibility(View.VISIBLE);
+        } else {
+/*            Toast.makeText(this, "no pic found", Toast.LENGTH_LONG).show();*/
+            TextView textImage = findViewById(R.id.text_image);
+            textImage.setText(R.string.slika_ni_najdena);
+            imageView.setVisibility(View.GONE);
+            textImage.setVisibility(View.VISIBLE);
         }
 
         // V ustrezna polja vstavimo ustrezne podatke.
+
         titleEdit.setText(title);
         artistEdit.setText(artist);
         albumEdit.setText(album);
-        //yearEdit.setText(year);
+        yearEdit.setText(String.valueOf(year));
 
         // Poslusalec za klike na gumb. Ob kliku na gumb se podatki shranijo, ce so bili
         // spremenjeni.
@@ -102,20 +113,38 @@ public class MetadataActivity extends AppCompatActivity {
                     if (filename.endsWith(".mp3")) {
                         Mp3Writer mp3Writer = new Mp3Writer(path);
                         int s = mp3Writer.setMetadata(metadata);
-                        Toast.makeText(context, String.valueOf(s), Toast.LENGTH_LONG).show();
+                        postResult(s);
                     } else if (filename.endsWith(".flac")) {
                         FlacWriter flacWriter = new FlacWriter(path);
                         int s = flacWriter.setMetadata(metadata);
-                        Toast.makeText(context, String.valueOf(s), Toast.LENGTH_LONG).show();
+                        postResult(s);
                     } else {
                         Toast.makeText(context, "Interna napaka.", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(context, "Nobeni podatki niso bili spremenjeni.",
-                            Toast.LENGTH_LONG).show();
+                    postResult(2);
                 }
+                finish();
+                overridePendingTransition(0, android.R.anim.fade_out);
             }
         });
+    }
+
+    private void postResult(int s) {
+        switch (s) {
+            case 0:
+                Toast.makeText(this, "Napaka pri shranjevanju",
+                        Toast.LENGTH_LONG).show();
+                break;
+            case 1:
+                Toast.makeText(this, "Metapodatki uspešno shranjeni",
+                        Toast.LENGTH_SHORT).show();
+                break;
+            case 2:
+                Toast.makeText(this, "Metapodatki so ostali nespremenjeni",
+                        Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     // Primerja podatke in ugotovi, ali so bili spremenjeni.

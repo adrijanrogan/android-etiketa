@@ -1,121 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <FrameLayout
-        android:id="@+id/frame"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.github.adrijanrogan.etiketa.ui.SquareImageView
-            android:id="@+id/image"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/text_id3_old"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/id3_starejsi_format"
-            android:textSize="18sp"
-            android:layout_margin="32dp"
-            android:visibility="gone" />
-
-    </FrameLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/text_title_wrapper"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:hint="@string/naslov"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frame">
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/text_title"
+        <View android:layout_width="fill_parent"
+            android:id="@+id/focus_view"
+            android:layout_height="0dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+            <requestFocus/></View>
+
+        <FrameLayout
+            android:id="@+id/frame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.github.adrijanrogan.etiketa.ui.SquareImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/id3_starejsi_format"
+                android:textSize="18sp"
+                android:layout_margin="32dp"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_title_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:hint="@string/naslov">
 
-    </android.support.design.widget.TextInputLayout>
+            <EditText
+                android:id="@+id/text_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/text_artist_wrapper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:hint="@string/izvajalec"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_title_wrapper">
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/text_artist"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_artist_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:hint="@string/izvajalec">
 
-    </android.support.design.widget.TextInputLayout>
+            <EditText
+                android:id="@+id/text_artist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/text_album_wrapper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:hint="@string/album"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_artist_wrapper">
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/text_album"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_album_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:hint="@string/album">
 
-    </android.support.design.widget.TextInputLayout>
+            <EditText
+                android:id="@+id/text_album"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/text_year_wrapper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:hint="@string/leto_izdaje"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_album_wrapper">
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/text_year"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_year_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:hint="@string/leto_izdaje">
 
-    </android.support.design.widget.TextInputLayout>
+            <EditText
+                android:id="@+id/text_year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
 
-    <Button
-        android:id="@+id/button_save"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_margin="16dp"
-        android:text="@string/shrani"
-        android:textSize="18sp"
-        app:layout_constraintTop_toTopOf="parent" />
+        </android.support.design.widget.TextInputLayout>
 
-</android.support.constraint.ConstraintLayout>
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_margin="16dp"
+            android:text="@string/shrani"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</ScrollView>
+
+

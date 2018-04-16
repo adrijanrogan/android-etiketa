@@ -24,6 +24,7 @@ class BrowserAdapter extends RecyclerView.Adapter<BrowserAdapter.FileViewHolder>
 
         ImageView fileIcon;
         TextView fileName;
+        TextView subFiles;
 
         FileViewHolder(View root) {
             super(root);
@@ -32,6 +33,7 @@ class BrowserAdapter extends RecyclerView.Adapter<BrowserAdapter.FileViewHolder>
             root.setOnClickListener(this);
             this.fileIcon = root.findViewById(R.id.holder_icon);
             this.fileName = root.findViewById(R.id.holder_file_name);
+            this.subFiles = root.findViewById(R.id.holder_sub_files);
         }
 
         // Preko vmesnika AdapterCallback posljemo povratni klic v BrowserActivity
@@ -40,6 +42,8 @@ class BrowserAdapter extends RecyclerView.Adapter<BrowserAdapter.FileViewHolder>
             callback.onClickFile(getLayoutPosition());
         }
     }
+
+
 
     public BrowserAdapter(File[] files, AdapterCallback callback) {
         this.files = files;
@@ -63,6 +67,29 @@ class BrowserAdapter extends RecyclerView.Adapter<BrowserAdapter.FileViewHolder>
         String fileName = file.getName();
 
         holder.fileName.setText(fileName);
+        // Pravilno sklanjamo glede na stevilo datotek v mapi.
+        if (file.isDirectory()) {
+            holder.subFiles.setVisibility(View.VISIBLE);
+            switch (file.listFiles().length) {
+                case 1:
+                    holder.subFiles.setText("1 datoteka");
+                    break;
+                case 2:
+                    holder.subFiles.setText("2 datoteki");
+                    break;
+                case 3:
+                case 4:
+                    holder.subFiles.setText(file.listFiles().length + " datoteke");
+                    break;
+                default:
+                    holder.subFiles.setText(file.listFiles().length + " datotek");
+                    break;
+            }
+        } else {
+            holder.subFiles.setVisibility(View.GONE);
+        }
+
+
         if (file.isDirectory()) {
             holder.fileIcon.setImageResource(R.drawable.ic_folder_black_24dp);
         } else if (fileName.endsWith("mp3") || fileName.endsWith("flac")) {

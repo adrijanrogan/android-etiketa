@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.adrijanrogan.etiketa.jni.FlacReader;
@@ -33,7 +37,9 @@ public class BrowserActivity extends AppCompatActivity implements AdapterCallbac
     // skrite datoteke.
     private boolean showHidden; // Ce false, skrijemo datoteke z zacetnico "."
 
+    private View rootView;
     private RecyclerView recyclerView;
+    private TextView noFiles;
 
     // Vstopna tocka v BrowserActivity.
     // Dolocimo postavitev, ki jo zelimo pokazati uporabniku (activity_browser).
@@ -43,7 +49,9 @@ public class BrowserActivity extends AppCompatActivity implements AdapterCallbac
         setContentView(R.layout.activity_browser);
 
         showHidden = false;
+        rootView = findViewById(R.id.root_view);
         recyclerView = findViewById(R.id.recycler);
+        noFiles = findViewById(R.id.text_no_files);
         getRootFile();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -87,8 +95,25 @@ public class BrowserActivity extends AppCompatActivity implements AdapterCallbac
 
     // Ob spremembi datotek posodobimo RecylcerView.
     private void updateRecyclerView() {
-        BrowserAdapter adapter = new BrowserAdapter(children, this);
-        recyclerView.swapAdapter(adapter, true);
+        if (parent.getAbsolutePath().equals(root.getAbsolutePath())) {
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(R.string.app_name);
+            }
+        } else {
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(parent.getName());
+            }
+        }
+        if (children.length == 0) {
+            recyclerView.setVisibility(View.GONE);
+            noFiles.setVisibility(View.VISIBLE);
+        } else {
+            noFiles.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            BrowserAdapter adapter = new BrowserAdapter(children, this);
+            recyclerView.swapAdapter(adapter, true);
+        }
+
     }
 
     // Povratni klic, ko uporabnik pritisne tipko nazaj.
@@ -129,6 +154,19 @@ public class BrowserActivity extends AppCompatActivity implements AdapterCallbac
     // Preveri, ce je glasbena datoteka. Ce je, odpre MetadataActivity za spreminjanje
     // metapodatkov.
     private void checkFile(File file) {
+        // Morda je datoteka medtem bila izbrisana.
+        if (!file.exists()) {
+            Toast.makeText(this,
+                    "Ta datoteka ne obstaja več. Seznam datotek se je samodejno osvežil",
+                    Toast.LENGTH_LONG).show();
+            children = parent.listFiles();
+            if (!showHidden) {
+                removeHiddenFiles();
+            }
+            sortChildren();
+            updateRecyclerView();
+            return;
+        }
         String path = file.getAbsolutePath();
         Metadata metadata;
         // Preveri, ali je datoteka mp3 ali flac, saj uporabljata razlicen nacin zapisovanja

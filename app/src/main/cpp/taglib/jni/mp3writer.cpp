@@ -52,14 +52,15 @@ Java_com_github_adrijanrogan_etiketa_jni_Mp3Writer_writeId3Tag(JNIEnv *env, jobj
             jbyte *imageData = env->GetByteArrayElements(imageData_, 0);
             mimeType = env->GetStringUTFChars(mimeType_, 0);
 
-            TagLib::ID3v2::FrameList list = file.ID3v2Tag()->frameListMap()["APIC"];
-            list.clear();
+            ID3v2::Tag *ID3Tag = file.ID3v2Tag(false);
+            ID3Tag->removeFrames("APIC");
+
             ByteVector *newPictureVector = new ByteVector;
             newPictureVector->setData(reinterpret_cast<const char *>(imageData));
             auto* frame = new ID3v2::AttachedPictureFrame;
             frame->setData(*newPictureVector);
             frame->setMimeType(mimeType);
-            list.append(frame);
+            ID3Tag->addFrame(frame);
 
             env->ReleaseStringUTFChars(mimeType_, mimeType);
             env->ReleaseByteArrayElements(imageData_, imageData, 0);
