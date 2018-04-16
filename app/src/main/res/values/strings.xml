@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Etiketa</string>
+    <string name="etiketa">Etiketa</string>
+    <string name="naslov">Naslov</string>
+    <string name="izvajalec">Izvajalec</string>
+    <string name="album">Album</string>
+    <string name="leto_izdaje">Leto izdaje</string>
+    <string name="shrani">Shrani</string>
+    <string name="id3_starejsi_format">Ta datoteka .mp3 uporablja starejši ID3 format, ki ne podpira možnosti shranjevanja slike znotraj datoteke.</string>
+    <string name="slika_ni_najdena">Slika v metapodatkih te datoteke ni bila najdena.</string>
+    <string name="prazna_mapa">Mapa, v kateri se nahajate, je prazna.</string>
+</resources>
