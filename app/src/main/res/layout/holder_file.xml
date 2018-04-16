@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
+    android:layout_height="64dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
@@ -13,18 +13,35 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="16dp"/>
 
-    <TextView
-        android:id="@+id/holder_file_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:maxLines="1"
-        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/holder_icon"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/holder_file_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/holder_sub_files"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>

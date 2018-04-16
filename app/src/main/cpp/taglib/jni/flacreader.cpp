@@ -67,10 +67,10 @@ Java_com_github_adrijanrogan_etiketa_jni_FlacReader_readXiphComment(JNIEnv *env,
             Picture *picture = pictureList[0];
             if (picture->data().size() != 0) {
                 mimeType = picture->mimeType().toCString(true);
-                ByteVector pictureData = picture->data();
-                char *rawData = pictureData.data();
-                imageData_ = env->NewByteArray(pictureData.size());
-                env->SetByteArrayRegion(imageData_, 0, pictureData.size(), (const jbyte *) rawData);
+                const char *pictureData = picture->data().data();
+                const unsigned int pictureSize = picture->data().size();
+                imageData_ = env->NewByteArray(pictureSize);
+                env->SetByteArrayRegion(imageData_, 0, pictureSize, (const jbyte *) pictureData);
             }
         }
     }
