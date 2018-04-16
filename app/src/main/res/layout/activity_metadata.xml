@@ -6,12 +6,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.github.adrijanrogan.etiketa.ui.SquareImageView
-        android:id="@+id/image"
+    <FrameLayout
+        android:id="@+id/frame"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content">
+
+        <com.github.adrijanrogan.etiketa.ui.SquareImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_id3_old"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/id3_starejsi_format"
+            android:textSize="18sp"
+            android:layout_margin="32dp"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/text_title_wrapper"
@@ -23,7 +39,7 @@
         android:hint="@string/naslov"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image">
+        app:layout_constraintTop_toBottomOf="@id/frame">
 
         <EditText
             android:id="@+id/text_title"
@@ -97,7 +113,7 @@
         android:id="@+id/button_save"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginTop="16dp"
+        android:layout_margin="16dp"
         android:text="@string/shrani"
         android:textSize="18sp"
         app:layout_constraintTop_toTopOf="parent" />

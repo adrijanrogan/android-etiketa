@@ -4,10 +4,11 @@ import android.support.annotation.NonNull;
 
 public class FlacWriter {
 
-    private String filename;
+    private String path;
 
-    public FlacWriter(@NonNull String filename) {
-        this.filename = filename;
+    // Nalozimo knjiznico in shranimo ime datoteke.
+    public FlacWriter(@NonNull String path) {
+        this.path = path;
         System.loadLibrary("taglib");
     }
 
@@ -18,9 +19,10 @@ public class FlacWriter {
         int year = metadata.getReleaseYear();
         String mimeType = metadata.getImageMimeType();
         byte[] imageData = metadata.getImageData();
-        return writeXiphComment(filename, title, artist, album, year, mimeType, imageData);
+        return writeXiphComment(path, title, artist, album, year, mimeType, imageData);
     }
 
+    // Nativna metoda.
     private native int writeXiphComment(String filename, String title, String artist,
                                              String album, int year, String mimeType, byte[] jArray);
 }

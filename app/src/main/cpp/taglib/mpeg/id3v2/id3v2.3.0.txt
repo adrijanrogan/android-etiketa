@@ -460,7 +460,7 @@ Abstract
   4.2.1 TLEN Length
   4.2.1 TMED Media type
   4.2.1 TOAL Original album/movie/show title
-  4.2.1 TOFN Original filename
+  4.2.1 TOFN Original path
   4.2.1 TOLY Original lyricist(s)/text writer(s)
   4.2.1 TOPE Original artist(s)/performer(s)
   4.2.1 TORY Original release year
@@ -760,9 +760,9 @@ Abstract
    music in the file should be a cover of a previously released song.
 
   TOFN
-   The 'Original filename' frame contains the preferred filename for the
+   The 'Original path' frame contains the preferred path for the
    file, since some media doesn't allow the desired length of the
-   filename. The filename is case sensitive and includes its suffix.
+   path. The path is case sensitive and includes its suffix.
 
   TOLY
    The 'Original lyricist(s)/text writer(s)' frame is intended for the
@@ -1398,7 +1398,7 @@ Abstract
    In this frame any type of file can be encapsulated. After the header,
    'Frame size' and 'Encoding' follows 'MIME type' [MIME] represented as
    as a terminated string encoded with ISO 8859-1 [ISO-8859-1]. The
-   filename is case sensitive and is encoded as 'Encoding'. Then follows
+   path is case sensitive and is encoded as 'Encoding'. Then follows
    a content description as terminated string, encoded as 'Encoding'.
    The last thing in the frame is the actual object. The first two
    strings may be omitted, leaving only their terminations. MIME type is

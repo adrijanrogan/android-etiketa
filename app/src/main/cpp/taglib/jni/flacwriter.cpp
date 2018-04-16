@@ -14,57 +14,67 @@ using namespace Ogg;
 extern "C"
 JNIEXPORT jint JNICALL
 Java_com_github_adrijanrogan_etiketa_jni_FlacWriter_writeXiphComment(JNIEnv *env, jobject instance,
-                                                                     jstring filename,
-                                                                     jstring title, jstring artist,
-                                                                     jstring album, jint year,
-                                                                     jstring mimeType,
-                                                                     jbyteArray jArray) {
-    const char *filenameC = env->GetStringUTFChars(filename, 0);
-    const char *titleC = env->GetStringUTFChars(title, 0);
-    const char *artistC = env->GetStringUTFChars(artist, 0);
-    const char *albumC = env->GetStringUTFChars(album, 0);
-    const char *mimeTypeC = env->GetStringUTFChars(mimeType, 0);
+                                                                     jstring filename_,
+                                                                     jstring title_, jstring artist_,
+                                                                     jstring album_, jint year,
+                                                                     jstring mimeType_,
+                                                                     jbyteArray imageData_) {
 
-    jbyte *imageData = NULL;
-    if (jArray != NULL) {
-        imageData = env->GetByteArrayElements(jArray, 0);
-    }
+    const char *filename, *title, *artist, *album, *mimeType;
 
-    FLAC::File file(filenameC, false, AudioProperties::Average);
+    filename = env->GetStringUTFChars(filename_, 0);
+    FLAC::File file(filename, false, AudioProperties::Average);
 
+    // Preverimo, ali je datoteka veljavna.
     if (file.isValid()) {
         XiphComment *tag = file.xiphComment(true);
         FieldListMap fieldListMap = tag->fieldListMap();
 
-        tag->setTitle(titleC);
-        tag->setArtist(artistC);
-        tag->setAlbum(albumC);
-        tag->setYear(static_cast<unsigned int>(year));
+        // Vsak metapodatek preverimo in zapisemo posebej za lazjo kontrolo in boljso preglednost.
 
-        if (imageData != NULL) {
+        if (title_ != NULL) {
+            title = env->GetStringUTFChars(title_, 0);
+            tag->setTitle(title);
+            env->ReleaseStringUTFChars(title_, title);
+        }
+
+        if (artist_ != NULL) {
+            artist = env->GetStringUTFChars(artist_, 0);
+            tag->setArtist(artist);
+            env->ReleaseStringUTFChars(artist_, artist);
+        }
+
+        if (album_ != NULL) {
+            album = env->GetStringUTFChars(album_, 0);
+            tag->setAlbum(album);
+            env->ReleaseStringUTFChars(album_, album);
+        }
+
+        if (year != -1) {
+            tag->setYear(static_cast<unsigned int>(year));
+        }
+
+        if (imageData_ != NULL && mimeType_ != NULL) {
+            jbyte *imageData = env->GetByteArrayElements(imageData_, 0);
+            mimeType = env->GetStringUTFChars(mimeType_, 0);
+
             Picture *newPicture = new Picture();
             ByteVector *newPictureVector = new ByteVector;
             newPictureVector->setData(reinterpret_cast<const char *>(imageData));
-            newPicture->setMimeType(mimeTypeC);
+            newPicture->setMimeType(mimeType);
             newPicture->setData(*newPictureVector);
             file.removePictures();
             file.addPicture(newPicture);
+
+            env->ReleaseStringUTFChars(mimeType_, mimeType);
+            env->ReleaseByteArrayElements(imageData_, imageData, 0);
         }
 
         // Ne smemo pozabiti shraniti sprememb!
         file.save();
+        return 1;
 
     } else {
         return 0;
     }
-
-    env->ReleaseStringUTFChars(filename, filenameC);
-    env->ReleaseStringUTFChars(title, titleC);
-    env->ReleaseStringUTFChars(artist, artistC);
-    env->ReleaseStringUTFChars(album, albumC);
-    env->ReleaseStringUTFChars(mimeType, mimeTypeC);
-    if (jArray != NULL) {
-        env->ReleaseByteArrayElements(jArray, imageData, 0);
-    }
-    return 1;
 }

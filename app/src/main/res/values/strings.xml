@@ -6,4 +6,5 @@
     <string name="album">Album</string>
     <string name="leto_izdaje">Leto izdaje</string>
     <string name="shrani">Shrani</string>
+    <string name="id3_starejsi_format">Ta datoteka .mp3 uporablja starejši ID3 format, ki ne podpira možnosti shranjevanja slike znotraj datoteke.</string>
 </resources>
