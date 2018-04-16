@@ -269,7 +269,7 @@ Abstract
    4.2.1 TLE Length
    4.2.1 TMT Media type
    4.2.1 TOA Original artist(s)/performer(s)
-   4.2.1 TOF Original filename
+   4.2.1 TOF Original path
    4.2.1 TOL Original Lyricist(s)/text writer(s)
    4.2.1 TOR Original release year
    4.2.1 TOT Original album/Movie/Show title
@@ -595,9 +595,9 @@ Abstract
    which a program was run.
 
   TOF
-   The 'Original filename' frame contains the preferred filename for the
+   The 'Original path' frame contains the preferred path for the
    file, since some media doesn't allow the desired length of the
-   filename. The filename is case sensitive and includes its suffix.
+   path. The path is case sensitive and includes its suffix.
 
   TLE
    The 'Length' frame contains the length of the audiofile in
@@ -1145,7 +1145,7 @@ Abstract
    In this frame any type of file can be encapsulated. After the header,
    'Frame size' and 'Encoding' follows 'MIME type' [MIME] and 'Filename'
    for the encapsulated object, both represented as terminated strings
-   encoded with ISO 8859-1 [ISO-8859-1]. The filename is case sensitive.
+   encoded with ISO 8859-1 [ISO-8859-1]. The path is case sensitive.
    Then follows a content description as terminated string, encoded as
    'Encoding'. The last thing in the frame is the actual object. The
    first two strings may be omitted, leaving only their terminations.

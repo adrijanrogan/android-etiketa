@@ -28,6 +28,9 @@ public class BrowserActivity extends AppCompatActivity implements AdapterCallbac
     private File root;
     private File parent;
     private File[] children;
+
+    // V prihodnje lahko uporabniku ponudimo izbiro, ali naj aplikacija pokaze tudi
+    // skrite datoteke.
     private boolean showHidden; // Ce false, skrijemo datoteke z zacetnico "."
 
     private RecyclerView recyclerView;
@@ -64,6 +67,8 @@ public class BrowserActivity extends AppCompatActivity implements AdapterCallbac
     // omogocimo spreminjanje metapodatkov te datoteke.
     @Override
     public void onClickFile(int position) {
+        // Za vsak slucaj preverimo, ali je pozicija znotraj polja, saj se v nasprotnem
+        // primeru aplikacija prisilno zaustavi.
         if (position <= children.length) {
             File file = children[position];
             if (file.isDirectory()) {
@@ -125,38 +130,61 @@ public class BrowserActivity extends AppCompatActivity implements AdapterCallbac
     // metapodatkov.
     private void checkFile(File file) {
         String path = file.getAbsolutePath();
-        if (path.endsWith(".mp3")) {
-            Mp3Reader mp3Reader = new Mp3Reader(path);
-            switch (mp3Reader.hasId3Tag()) {
-                case 0:
-                    Toast.makeText(this, "Te datoteke ni bilo možno prebrati.", Toast.LENGTH_LONG).show();
-                    break;
-                case 1:
-                case 2:
-                    Metadata metadata = mp3Reader.getMetadata();
-                    metadata.writeImageToDisk(this);
-                    Bundle bundle = metadata.toBundle();
-                    Intent intent = new Intent(this, MetadataActivity.class);
-                    intent.putExtra("METADATA", bundle);
-                    intent.putExtra("FILENAME", path);
-                    startActivity(intent);
-            }
+        Metadata metadata;
+        // Preveri, ali je datoteka mp3 ali flac, saj uporabljata razlicen nacin zapisovanja
+        // metapodatkov.
+        // Mozno je tudi, da je datoteka poskodovana ali pa sploh ni mp3 ali flac formata.
+        // Za vse druge formate datotek uporabniku javimo, da format ni podprt.
 
-        } else if (path.endsWith(".flac")) {
-            FlacReader flacReader = new FlacReader(path);
-            if (!flacReader.hasXiphComment()) {
-                Toast.makeText(this, "Te datoteke ni bilo možno prebrati.", Toast.LENGTH_LONG).show();
-            } else {
-                Metadata metadata = flacReader.getMetadata();
-                metadata.writeImageToDisk(this);
-                Bundle bundle = metadata.toBundle();
-                Intent intent = new Intent(this, MetadataActivity.class);
-                intent.putExtra("METADATA", bundle);
-                intent.putExtra("FILENAME", path);
-                startActivity(intent);
-            }
-        } else {
-            Toast.makeText(this, "Format te datoteke ni podprt.", Toast.LENGTH_LONG).show();
+        // Vrne vse od zadnje pike naprej.
+        // Primer: path = "home/adrijan/foo.mp3" --> format = ".mp3"
+        String format = path.substring(path.lastIndexOf("."));
+        switch (format) {
+            case ".mp3":
+                Mp3Reader mp3Reader = new Mp3Reader(path);
+                switch (mp3Reader.hasId3Tag()) {
+                    case 0:
+                        Toast.makeText(this, "Te datoteke ni bilo možno prebrati.",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    // Za ID3 verzija 1.
+                    case 1:
+                        metadata = mp3Reader.getMetadata();
+                        metadata.setId3Version(1);
+                        runActivity(file, metadata);
+                        break;
+                        // Za ID3 verzija 2.
+                    case 2:
+                        metadata = mp3Reader.getMetadata();
+                        metadata.setId3Version(2);
+                        runActivity(file, metadata);
+                        break;
+                }
+                break;
+            case ".flac":
+                FlacReader flacReader = new FlacReader(path);
+                if (!flacReader.hasXiphComment()) {
+                    Toast.makeText(this, "Te datoteke ni bilo možno prebrati.",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    metadata = flacReader.getMetadata();
+                    runActivity(file, metadata);
+                }
+                break;
+            default:
+                Toast.makeText(this, "Format te datoteke ni podprt.",
+                        Toast.LENGTH_LONG).show();
+                break;
         }
+    }
+
+    // Odpre MetadataActivity za spreminjanje metapodatkov.
+    private void runActivity(File file, Metadata metadata) {
+        metadata.writeImageToDisk(this);
+        Bundle bundle = metadata.toBundle();
+        Intent intent = new Intent(this, MetadataActivity.class);
+        intent.putExtra("METADATA", bundle);
+        intent.putExtra("FILE", file);
+        startActivity(intent);
     }
 }

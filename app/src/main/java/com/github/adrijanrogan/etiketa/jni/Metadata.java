@@ -19,7 +19,9 @@ public class Metadata {
 
     private String imageMimeType; // MIME tip slike.
     private byte[] imageData; // Podatki slike.
-    private String imagePath;
+    private String imagePath; // Pot do slike.
+
+    private int id3Version = 0;
 
     public Metadata(String title, String artist, String album, int releaseYear,
                     String imageMimeType, byte[] imageData) {
@@ -31,6 +33,7 @@ public class Metadata {
         this.imageData = imageData;
     }
 
+    // Zapise sliko na disk za lazje dostopanje.
     public void writeImageToDisk(Context context) {
         if (imageData != null) {
             File folder = context.getDir("pictures", Context.MODE_PRIVATE);
@@ -46,6 +49,7 @@ public class Metadata {
         }
     }
 
+    // Shrani metapodatke v Bundle za prenos po sistemu Android (Intent)
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putString("TITLE", title);
@@ -54,7 +58,13 @@ public class Metadata {
         bundle.putInt("YEAR", releaseYear);
         bundle.putString("IMAGE_MIME", imageMimeType);
         bundle.putString("IMAGE_PATH", imagePath);
+        bundle.putInt("ID3", id3Version);
         return bundle;
+    }
+
+    // Getterji in setterji.
+    public void setId3Version(int version) {
+        id3Version = version;
     }
 
     public String getTitle() {
@@ -83,5 +93,9 @@ public class Metadata {
 
     public String getImagePath() {
         return imagePath;
+    }
+
+    public int getId3Version() {
+        return id3Version;
     }
 }

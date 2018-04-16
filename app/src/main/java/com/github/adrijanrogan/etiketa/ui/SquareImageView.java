@@ -20,6 +20,7 @@ public class SquareImageView extends android.support.v7.widget.AppCompatImageVie
         super(context, attrs, defStyleAttr);
     }
 
+    // Poskrbi, da je nas ImageView vedno kvadratne oblike.
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);

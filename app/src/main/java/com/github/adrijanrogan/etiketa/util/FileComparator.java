@@ -5,6 +5,7 @@ import java.util.Comparator;
 
 public class FileComparator implements Comparator<File> {
 
+    // Razvrsti datoteke po tem, ali so mape ali datoteke in po njihovem imenu.
     @Override
     public int compare(File o1, File o2) {
         if (o1.isDirectory() == o2.isDirectory()) {

@@ -34,24 +34,24 @@ Java_com_github_adrijanrogan_etiketa_jni_Mp3Reader_readId3Tag(JNIEnv *env, jobje
     const char *filename = env->GetStringUTFChars(filename_, 0);
 
     MPEG::File file(filename, false, AudioProperties::Average);
-    jclass clazz = env->FindClass("com/github/adrijanrogan/etiketa/jni/Metadata");
-    jmethodID methodId = env->
-            GetMethodID(clazz, "<init>",
+    jclass class_ = env->FindClass("com/github/adrijanrogan/etiketa/jni/Metadata");
+    jmethodID methodId_ = env->
+            GetMethodID(class_, "<init>",
                         "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;[B)V");
 
-    std::string titleC;
-    std::string artistC;
-    std::string albumC;
+    std::string title;
+    std::string artist;
+    std::string album;
     int year = -1;
     std::string mimeType;
-    jbyteArray jArray = NULL;
+    jbyteArray imageData_ = NULL;
 
     if (file.isValid()) {
         Tag *tag = file.tag();
 
-        titleC = tag->title().toCString(true);
-        artistC = tag->artist().toCString(true);
-        albumC = tag->album().toCString(true);
+        title = tag->title().toCString(true);
+        artist = tag->artist().toCString(true);
+        album = tag->album().toCString(true);
         year = tag->year();
 
 
@@ -62,23 +62,19 @@ Java_com_github_adrijanrogan_etiketa_jni_Mp3Reader_readId3Tag(JNIEnv *env, jobje
                 mimeType = frame->mimeType().toCString(true);
                 ByteVector pictureData = frame->picture().data();
                 char *rawData = pictureData.data();
-                jArray = env->NewByteArray(pictureData.size());
-                env->SetByteArrayRegion(jArray, 0, pictureData.size(), (const jbyte *) rawData);
+                imageData_ = env->NewByteArray(pictureData.size());
+                env->SetByteArrayRegion(imageData_, 0, pictureData.size(), (const jbyte *) rawData);
             }
         }
     }
 
-    jstring titleJ = env->NewStringUTF(titleC.c_str());
-    jstring artistJ = env->NewStringUTF(artistC.c_str());
-    jstring albumJ = env->NewStringUTF(albumC.c_str());
-    jstring mimeTypeJ = env->NewStringUTF(mimeType.c_str());
+    jstring title_ = env->NewStringUTF(title.c_str());
+    jstring artist_ = env->NewStringUTF(artist.c_str());
+    jstring album_ = env->NewStringUTF(album.c_str());
+    jstring mimeType_ = env->NewStringUTF(mimeType.c_str());
 
     env->ReleaseStringUTFChars(filename_, filename);
 
-    /*
-     * Use ONLY Java objects here!
-     */
-
     return env->NewObject
-            (clazz, methodId, titleJ, artistJ, albumJ, year, mimeTypeJ, jArray);
+            (class_, methodId_, title_, artist_, album_, year, mimeType_, imageData_);
 }

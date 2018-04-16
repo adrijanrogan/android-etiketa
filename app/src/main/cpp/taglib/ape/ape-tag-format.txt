@@ -124,11 +124,11 @@ that version are zeroed and ignored when reading.
 
  (*) Should be ignored by tools for editing text values
 (**) Allowed external reference formats:
-     - http://host/directory/filename.ext
-     - ftp://host/directory/filename.ext
-     - filename.ext
-     - /directory/filename.ext
-     - DRIVE:/directory/filename.ext
+     - http://host/directory/path.ext
+     - ftp://host/directory/path.ext
+     - path.ext
+     - /directory/path.ext
+     - DRIVE:/directory/path.ext
 
      Note: External references are also UTF-8 encoded.
 

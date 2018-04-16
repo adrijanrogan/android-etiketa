@@ -22,12 +22,12 @@ Java_com_github_adrijanrogan_etiketa_jni_FlacReader_readXiphComment(JNIEnv *env,
             GetMethodID(clazz, "<init>",
                         "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;[B)V");
 
-    std::string titleC;
-    std::string artistC;
-    std::string albumC;
+    std::string title;
+    std::string artist;
+    std::string album;
     int year = -1;
     std::string mimeType;
-    jbyteArray jArray = NULL;
+    jbyteArray imageData_ = NULL;
 
     if (file.isValid() && file.hasXiphComment()) {
         XiphComment *tag = file.xiphComment();
@@ -35,23 +35,23 @@ Java_com_github_adrijanrogan_etiketa_jni_FlacReader_readXiphComment(JNIEnv *env,
 
         if (tag->contains("TITLE")) {
             String string = fieldListMap["TITLE"].toString();
-            titleC = string.to8Bit(true);
+            title = string.to8Bit(true);
         } else {
-            titleC = "<unknown>";
+            title = "<unknown>";
         }
 
         if (tag->contains("ARTIST")) {
             String string = fieldListMap["ARTIST"].toString();
-            artistC = string.toCString(true);
+            artist = string.toCString(true);
         } else {
-            artistC = "<unknown>";
+            artist = "<unknown>";
         }
 
         if (tag->contains("ALBUM")) {
             String string = fieldListMap["ALBUM"].toString();
-            albumC = string.toCString(true);
+            album = string.toCString(true);
         } else {
-            albumC = "<unknown>";
+            album = "<unknown>";
         }
 
         if (tag->contains("YEAR")) {
@@ -69,26 +69,22 @@ Java_com_github_adrijanrogan_etiketa_jni_FlacReader_readXiphComment(JNIEnv *env,
                 mimeType = picture->mimeType().toCString(true);
                 ByteVector pictureData = picture->data();
                 char *rawData = pictureData.data();
-                jArray = env->NewByteArray(pictureData.size());
-                env->SetByteArrayRegion(jArray, 0, pictureData.size(), (const jbyte *) rawData);
+                imageData_ = env->NewByteArray(pictureData.size());
+                env->SetByteArrayRegion(imageData_, 0, pictureData.size(), (const jbyte *) rawData);
             }
         }
     }
 
 
-    jstring titleJ = env->NewStringUTF(titleC.c_str());
-    jstring artistJ = env->NewStringUTF(artistC.c_str());
-    jstring albumJ = env->NewStringUTF(albumC.c_str());
-    jstring mimeTypeJ = env->NewStringUTF(mimeType.c_str());
+    jstring title_ = env->NewStringUTF(title.c_str());
+    jstring artist_ = env->NewStringUTF(artist.c_str());
+    jstring album_ = env->NewStringUTF(album.c_str());
+    jstring mimeType_ = env->NewStringUTF(mimeType.c_str());
 
     env->ReleaseStringUTFChars(filename_, filename);
 
-    /*
-     * Use ONLY Java objects here!
-     */
-
     return env->NewObject
-            (clazz, methodId, titleJ, artistJ, albumJ, year, mimeTypeJ, jArray);
+            (clazz, methodId, title_, artist_, album_, year, mimeType_, imageData_);
 }
 
 extern "C"
