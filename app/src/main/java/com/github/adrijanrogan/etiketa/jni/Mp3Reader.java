@@ -1,6 +1,6 @@
 package com.github.adrijanrogan.etiketa.jni;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class Mp3Reader {
 
