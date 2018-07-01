@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.github.adrijanrogan.etiketa.R;
+import com.github.adrijanrogan.etiketa.ui.browse.BrowseActivity;
 
 
 public class StartActivity extends AppCompatActivity {
@@ -20,7 +21,7 @@ public class StartActivity extends AppCompatActivity {
 
     // Preverimo, ali imamo dovoljenje za dostop do spomina.
     // Ce dovoljenja nimamo, ga zahtevamo.
-    // Ce dovoljenje imamo, zazenemo BrowserActivity
+    // Ce dovoljenje imamo, zazenemo BrowseActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +43,7 @@ public class StartActivity extends AppCompatActivity {
     }
 
     // Povratni klic, ki ga dobimo, ko se uporabnik odloci, ali bo zahtevo sprejel ali zavrnil
-    // Ce zahtevo sprejme, zazenemo BrowserActivity, sicer pa se enkrat zahtevamo pravico
+    // Ce zahtevo sprejme, zazenemo BrowseActivity, sicer pa se enkrat zahtevamo pravico
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST) {
@@ -56,9 +57,9 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
-    // Zazenemo BrowserActivity
+    // Zazenemo BrowseActivity
     private void proceed() {
-        Intent intent = new Intent(this, BrowserActivity.class);
+        Intent intent = new Intent(this, BrowseActivity.class);
         startActivity(intent);
     }
 }

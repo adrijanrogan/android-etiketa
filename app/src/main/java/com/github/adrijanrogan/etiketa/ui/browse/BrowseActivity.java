@@ -1,73 +1,52 @@
-package com.github.adrijanrogan.etiketa.ui;
+package com.github.adrijanrogan.etiketa.ui.browse;
 
 import android.content.Intent;
-import android.os.Environment;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.adrijanrogan.etiketa.jni.FlacReader;
 import com.github.adrijanrogan.etiketa.jni.Metadata;
 import com.github.adrijanrogan.etiketa.jni.Mp3Reader;
-import com.github.adrijanrogan.etiketa.util.FileComparator;
+import com.github.adrijanrogan.etiketa.ui.MetadataActivity;
 import com.github.adrijanrogan.etiketa.R;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public class BrowserActivity extends AppCompatActivity implements AdapterCallback {
+public class BrowseActivity extends AppCompatActivity implements AdapterCallback {
 
-    // Vedno hranimo referenco parent, da se lahko enostavneje vrnemo v visjo hierarhijo.
-    // Ce sta parent in root enaka, smo ze najvisje.
-    // Uporabnik se v visjo hierarhijo vraca s tipko nazaj, v primeru, da smo ze najvisje,
-    // pa se aplikacija (kot je obicajno za tipko nazaj) zapre.
-    private File root;
-    private File parent;
-    private File[] children;
+    private BrowseViewModel viewModel;
 
     // V prihodnje lahko uporabniku ponudimo izbiro, ali naj aplikacija pokaze tudi
     // skrite datoteke.
     private boolean showHidden; // Ce false, skrijemo datoteke z zacetnico "."
 
-    private View rootView;
     private RecyclerView recyclerView;
     private TextView noFiles;
 
-    // Vstopna tocka v BrowserActivity.
+    // Vstopna tocka v BrowseActivity.
     // Dolocimo postavitev, ki jo zelimo pokazati uporabniku (activity_browser).
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
 
+        viewModel = ViewModelProviders.of(this).get(BrowseViewModel.class);
+
         showHidden = false;
-        rootView = findViewById(R.id.root_view);
         recyclerView = findViewById(R.id.recycler);
         noFiles = findViewById(R.id.text_no_files);
-        getRootFile();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        updateRecyclerView();
-    }
-
-    // Pridobimo zacetno tocko uporabniskega spomina in datoteke pod zacetno tocko.
-    private void getRootFile() {
-        root = new File(Environment.getExternalStorageDirectory().getPath() + "/");
-        parent = root;
-        children = root.listFiles();
-        if (!showHidden) {
-            removeHiddenFiles();
-        }
-        sortChildren();
+        updateUI();
     }
 
     // Povratni klic, ki ga prejmemo, ko uporabnik klikne na element v seznamu RecyclerView.
@@ -77,94 +56,59 @@ public class BrowserActivity extends AppCompatActivity implements AdapterCallbac
     public void onClickFile(int position) {
         // Za vsak slucaj preverimo, ali je pozicija znotraj polja, saj se v nasprotnem
         // primeru aplikacija prisilno zaustavi.
-        if (position <= children.length) {
-            File file = children[position];
+        File[] currentChildren = viewModel.getChildren();
+        if (position <= currentChildren.length) {
+            File file = currentChildren[position];
             if (file.isDirectory()) {
-                parent = children[position];
-                children = parent.listFiles();
-                if (!showHidden) {
-                    removeHiddenFiles();
-                }
-                sortChildren();
-                updateRecyclerView();
+                viewModel.goDown(file);
+                updateUI();
             } else {
                 checkFile(file);
             }
         }
     }
 
-    // Ob spremembi datotek posodobimo RecylcerView.
-    private void updateRecyclerView() {
-        if (parent.getAbsolutePath().equals(root.getAbsolutePath())) {
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setTitle(R.string.app_name);
-            }
-        } else {
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setTitle(parent.getName());
-            }
+    // Ob spremembi datotek posodobimo uporabniski vmesnik in RecylcerView.
+    private void updateUI() {
+        viewModel.sortFiles();
+        viewModel.removeHiddenFiles();
+        File[] currentChildren = viewModel.getChildren();
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(viewModel.getTitle(this));
         }
-        if (children.length == 0) {
+
+        if (currentChildren.length == 0) {
             recyclerView.setVisibility(View.GONE);
             noFiles.setVisibility(View.VISIBLE);
         } else {
             noFiles.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
-            BrowserAdapter adapter = new BrowserAdapter(children, this);
+            BrowseAdapter adapter = new BrowseAdapter(currentChildren, this);
             recyclerView.swapAdapter(adapter, true);
         }
-
     }
 
     // Povratni klic, ko uporabnik pritisne tipko nazaj.
     @Override
     public void onBackPressed() {
-        if (parent.getAbsolutePath().equals(root.getAbsolutePath())) {
+        if (viewModel.checkIfParentRoot()) {
             // Po navadi poskrbi, da se vrnemo v prejsnji Activity. Ker prejsnjega
             // Activity ni, se aplikacija zapre.
             super.onBackPressed();
         } else {
-            parent = parent.getParentFile();
-            children = parent.listFiles();
-            if (!showHidden) {
-                removeHiddenFiles();
-            }
-            sortChildren();
-            updateRecyclerView();
+            viewModel.goUp();
+            updateUI();
         }
-    }
-
-    // Sortiramo datoteke po tipu (mapa ali datoteka) in imenu
-    private void sortChildren() {
-        Arrays.sort(children, new FileComparator());
-    }
-
-    // Odstranimo datoteke, ki se zacnejo na "." (skrite datoteke)
-    private void removeHiddenFiles() {
-        List<File> fileList = new ArrayList<>(Arrays.asList(children));
-        for (int i = fileList.size() - 1; i >= 0; i--) {
-            File file = fileList.get(i);
-            if (file.getName().startsWith(".")) {
-                fileList.remove(i);
-            }
-        }
-        children = fileList.toArray(new File[0]);
     }
 
     // Preveri, ce je glasbena datoteka. Ce je, odpre MetadataActivity za spreminjanje
     // metapodatkov.
     private void checkFile(File file) {
-        // Morda je datoteka medtem bila izbrisana.
+        // Morda je datoteka medtem bila izbrisana ali premaknjena.
         if (!file.exists()) {
-            Toast.makeText(this,
-                    "Ta datoteka ne obstaja več. Seznam datotek se je samodejno osvežil",
-                    Toast.LENGTH_LONG).show();
-            children = parent.listFiles();
-            if (!showHidden) {
-                removeHiddenFiles();
-            }
-            sortChildren();
-            updateRecyclerView();
+            viewModel.goUp();
+            updateUI();
             return;
         }
         String path = file.getAbsolutePath();

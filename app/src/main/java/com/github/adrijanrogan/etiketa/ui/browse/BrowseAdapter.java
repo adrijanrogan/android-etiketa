@@ -1,4 +1,4 @@
-package com.github.adrijanrogan.etiketa.ui;
+package com.github.adrijanrogan.etiketa.ui.browse;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,7 +12,7 @@ import com.github.adrijanrogan.etiketa.R;
 
 import java.io.File;
 
-class BrowserAdapter extends RecyclerView.Adapter<BrowserAdapter.FileViewHolder> {
+class BrowseAdapter extends RecyclerView.Adapter<BrowseAdapter.FileViewHolder> {
 
     private File[] files;
     private AdapterCallback callback;
@@ -36,7 +36,7 @@ class BrowserAdapter extends RecyclerView.Adapter<BrowserAdapter.FileViewHolder>
             this.subFiles = root.findViewById(R.id.holder_sub_files);
         }
 
-        // Preko vmesnika AdapterCallback posljemo povratni klic v BrowserActivity
+        // Preko vmesnika AdapterCallback posljemo povratni klic v BrowseActivity
         @Override
         public void onClick(View v) {
             callback.onClickFile(getLayoutPosition());
@@ -45,7 +45,7 @@ class BrowserAdapter extends RecyclerView.Adapter<BrowserAdapter.FileViewHolder>
 
 
 
-    public BrowserAdapter(File[] files, AdapterCallback callback) {
+    public BrowseAdapter(File[] files, AdapterCallback callback) {
         this.files = files;
         this.callback = callback;
     }
