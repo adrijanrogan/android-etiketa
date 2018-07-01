@@ -23,8 +23,14 @@ public class BrowseViewModel extends ViewModel {
     private File parent;
     private File[] children;
 
+    private File selectedFile;
+
     public BrowseViewModel() {
         super();
+        setup();
+    }
+
+    void setup() {
         root = new File(Environment.getExternalStorageDirectory().getPath() + "/");
         parent = root;
         children = parent.listFiles();
@@ -40,9 +46,7 @@ public class BrowseViewModel extends ViewModel {
         children = parent.listFiles();
     }
 
-    File[] getChildren() {
-        return children;
-    }
+
 
     boolean checkIfParentRoot() {
         return parent.getAbsolutePath().equals(root.getAbsolutePath());
@@ -55,6 +59,8 @@ public class BrowseViewModel extends ViewModel {
             return parent.getName();
         }
     }
+
+
 
     void sortFiles() {
         Arrays.sort(children, new FileComparator());
@@ -69,5 +75,13 @@ public class BrowseViewModel extends ViewModel {
             }
         }
         children = fileList.toArray(new File[0]);
+    }
+
+    File[] getChildren() {
+        return children;
+    }
+
+    void setSelectedFile(File file) {
+        selectedFile = file;
     }
 }

@@ -162,6 +162,7 @@ public class BrowseActivity extends AppCompatActivity implements AdapterCallback
 
     // Odpre MetadataActivity za spreminjanje metapodatkov.
     private void runActivity(File file, Metadata metadata) {
+        viewModel.setSelectedFile(file);
         metadata.writeImageToDisk(this);
         Bundle bundle = metadata.toBundle();
         Intent intent = new Intent(this, MetadataActivity.class);
