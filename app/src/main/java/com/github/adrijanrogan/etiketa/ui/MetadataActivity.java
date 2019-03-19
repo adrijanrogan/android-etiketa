@@ -18,10 +18,10 @@ import com.github.adrijanrogan.etiketa.R;
 import com.github.adrijanrogan.etiketa.jni.FlacWriter;
 import com.github.adrijanrogan.etiketa.jni.Metadata;
 import com.github.adrijanrogan.etiketa.jni.Mp3Writer;
+import com.github.adrijanrogan.etiketa.jni.Writer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.Objects;
 
 public class MetadataActivity extends AppCompatActivity {
 
@@ -102,13 +102,14 @@ public class MetadataActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (compareData()) {
                     Metadata metadata = makeMetadata();
+                    Writer writer;
                     if (filename.endsWith(".mp3")) {
-                        Mp3Writer mp3Writer = new Mp3Writer(path);
-                        int s = mp3Writer.setMetadata(metadata);
+                        writer = new Mp3Writer(path);
+                        int s = writer.writeMetadata(metadata);
                         postResult(s);
                     } else if (filename.endsWith(".flac")) {
-                        FlacWriter flacWriter = new FlacWriter(path);
-                        int s = flacWriter.setMetadata(metadata);
+                        writer = new FlacWriter(path);
+                        int s = writer.writeMetadata(metadata);
                         postResult(s);
                     } else {
                         Toast.makeText(context, "Interna napaka.", Toast.LENGTH_LONG).show();
