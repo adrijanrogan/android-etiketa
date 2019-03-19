@@ -1,12 +1,11 @@
 package com.github.adrijanrogan.etiketa.jni;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class Mp3Reader {
 
     private String path;
 
-    // Nalozimo knjiznico in shranimo ime datoteke.
     public Mp3Reader(@NonNull String path) {
         this.path = path;
         System.loadLibrary("taglib");
@@ -20,7 +19,6 @@ public class Mp3Reader {
         return readId3Tag(path);
     }
 
-    // Nativni metodi.
     private native int hasId3Tag(String filename);
     private native Metadata readId3Tag(String filename);
 }

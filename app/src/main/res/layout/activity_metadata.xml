@@ -41,7 +41,7 @@
 
         </FrameLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_title_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,9 +56,9 @@
                 android:layout_height="wrap_content"
                 android:inputType="text" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_artist_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,9 +73,9 @@
                 android:layout_height="wrap_content"
                 android:inputType="text" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_album_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -90,9 +90,9 @@
                 android:layout_height="wrap_content"
                 android:inputType="text" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_year_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/button_save"

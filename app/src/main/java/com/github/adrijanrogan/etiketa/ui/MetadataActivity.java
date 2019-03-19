@@ -5,8 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,7 +44,6 @@ public class MetadataActivity extends AppCompatActivity {
     private EditText yearEdit;
     private Button buttonSave;
 
-    // Vstopna tocka v MetadataActivity.
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,34 +76,27 @@ public class MetadataActivity extends AppCompatActivity {
 
         // Vstavimo sliko, ce obstaja. Sicer skrijemo sliko in zapisemo razlog.
         if (imagePath != null) {
-/*            Toast.makeText(this, "image path = " + imagePath,
-                    Toast.LENGTH_SHORT).show();*/
             imageView.setVisibility(View.VISIBLE);
             Bitmap albumArt = BitmapFactory.decodeFile(imagePath);
             imageView.setImageBitmap(albumArt);
         } else if (filename.endsWith(".mp3") && metadata.getInt("ID3") == 1) {
-/*            Toast.makeText(this, "id3 version 1", Toast.LENGTH_LONG).show();*/
             TextView textImage = findViewById(R.id.text_image);
             textImage.setText(R.string.id3_starejsi_format);
             imageView.setVisibility(View.GONE);
             textImage.setVisibility(View.VISIBLE);
         } else {
-/*            Toast.makeText(this, "no pic found", Toast.LENGTH_LONG).show();*/
             TextView textImage = findViewById(R.id.text_image);
             textImage.setText(R.string.slika_ni_najdena);
             imageView.setVisibility(View.GONE);
             textImage.setVisibility(View.VISIBLE);
         }
 
-        // V ustrezna polja vstavimo ustrezne podatke.
 
         titleEdit.setText(title);
         artistEdit.setText(artist);
         albumEdit.setText(album);
         yearEdit.setText(String.valueOf(year));
 
-        // Poslusalec za klike na gumb. Ob kliku na gumb se podatki shranijo, ce so bili
-        // spremenjeni.
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -25,7 +25,7 @@
         </activity>
 
         <!-- V AndroidManifest moramo deklarirati vse svoje komponente -->
-        <activity android:name="com.github.adrijanrogan.etiketa.ui.BrowserActivity" />
+        <activity android:name="com.github.adrijanrogan.etiketa.ui.browse.BrowseActivity" />
         <activity android:name="com.github.adrijanrogan.etiketa.ui.MetadataActivity" />
 
     </application>
