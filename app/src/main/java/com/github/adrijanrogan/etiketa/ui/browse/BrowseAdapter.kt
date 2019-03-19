@@ -39,7 +39,8 @@ class BrowseAdapter(private val context: Context, private val callback: AdapterC
         if (file.isDirectory) {
             holder.subFiles.visibility = View.VISIBLE
             val count = file.listFiles().size
-            holder.subFiles.text = context.resources.getQuantityString(
+            if (count == 0) holder.subFiles.text = context.getString(R.string.numberOfFilesEmpty)
+            else holder.subFiles.text = context.resources.getQuantityString(
                     R.plurals.numberOfFiles, count, count)
         } else {
             holder.subFiles.visibility = View.GONE

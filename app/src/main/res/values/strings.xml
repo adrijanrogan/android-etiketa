@@ -20,4 +20,6 @@
         <item quantity="other">%d files</item>
     </plurals>
 
+    <string name="numberOfFilesEmpty">Empty folder</string>
+
 </resources>

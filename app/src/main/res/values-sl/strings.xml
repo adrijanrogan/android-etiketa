@@ -21,5 +21,6 @@
         <item quantity="few">%d datotek</item>
         <item quantity="other">%d datotek</item>
     </plurals>
+    <string name="numberOfFilesEmpty">Prazna mapa</string>
 
 </resources>
