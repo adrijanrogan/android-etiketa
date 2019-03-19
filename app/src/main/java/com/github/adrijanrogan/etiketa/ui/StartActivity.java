@@ -19,9 +19,8 @@ public class StartActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST = 9858;
 
-    // Preverimo, ali imamo dovoljenje za dostop do spomina.
-    // Ce dovoljenja nimamo, ga zahtevamo.
-    // Ce dovoljenje imamo, zazenemo BrowseActivity
+    // Nimamo dovoljenja -> zahtevamo
+    // sicer -> zazenemo BrowseActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,14 +35,11 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
-    // Zahtevamo dovoljenje za dostop do spomina
     private void requestPermission() {
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST);
     }
 
-    // Povratni klic, ki ga dobimo, ko se uporabnik odloci, ali bo zahtevo sprejel ali zavrnil
-    // Ce zahtevo sprejme, zazenemo BrowseActivity, sicer pa se enkrat zahtevamo pravico
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST) {
@@ -57,7 +53,6 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
-    // Zazenemo BrowseActivity
     private void proceed() {
         Intent intent = new Intent(this, BrowseActivity.class);
         startActivity(intent);

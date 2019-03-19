@@ -24,8 +24,6 @@ public class BrowseActivity extends AppCompatActivity implements AdapterCallback
 
     private BrowseViewModel viewModel;
 
-    // V prihodnje lahko uporabniku ponudimo izbiro, ali naj aplikacija pokaze tudi
-    // skrite datoteke.
     private boolean showHidden; // Ce false, skrijemo datoteke z zacetnico "."
 
     private RecyclerView recyclerView;
@@ -49,13 +47,10 @@ public class BrowseActivity extends AppCompatActivity implements AdapterCallback
         updateUI();
     }
 
-    // Povratni klic, ki ga prejmemo, ko uporabnik klikne na element v seznamu RecyclerView.
-    // Ce je kliknil na mapo, pokazemo novo hierarhijo, sicer pa, ce je datoteka podprta,
-    // omogocimo spreminjanje metapodatkov te datoteke.
+    // Klik na mapo -> pokazemo novo hierarhijo,
+    // sicer -> ce je datoteka podprta, omogocimo spreminjanje metapodatkov te datoteke.
     @Override
     public void onClickFile(int position) {
-        // Za vsak slucaj preverimo, ali je pozicija znotraj polja, saj se v nasprotnem
-        // primeru aplikacija prisilno zaustavi.
         File[] currentChildren = viewModel.getChildren();
         if (position <= currentChildren.length) {
             File file = currentChildren[position];
@@ -68,7 +63,6 @@ public class BrowseActivity extends AppCompatActivity implements AdapterCallback
         }
     }
 
-    // Ob spremembi datotek posodobimo uporabniski vmesnik in RecylcerView.
     private void updateUI() {
         viewModel.sortFiles();
         viewModel.removeHiddenFiles();
@@ -89,12 +83,9 @@ public class BrowseActivity extends AppCompatActivity implements AdapterCallback
         }
     }
 
-    // Povratni klic, ko uporabnik pritisne tipko nazaj.
     @Override
     public void onBackPressed() {
         if (viewModel.checkIfParentRoot()) {
-            // Po navadi poskrbi, da se vrnemo v prejsnji Activity. Ker prejsnjega
-            // Activity ni, se aplikacija zapre.
             super.onBackPressed();
         } else {
             viewModel.goUp();
@@ -102,8 +93,7 @@ public class BrowseActivity extends AppCompatActivity implements AdapterCallback
         }
     }
 
-    // Preveri, ce je glasbena datoteka. Ce je, odpre MetadataActivity za spreminjanje
-    // metapodatkov.
+
     private void checkFile(File file) {
         // Morda je datoteka medtem bila izbrisana ali premaknjena.
         if (!file.exists()) {
@@ -111,11 +101,12 @@ public class BrowseActivity extends AppCompatActivity implements AdapterCallback
             updateUI();
             return;
         }
+
         String path = file.getAbsolutePath();
         Metadata metadata;
+
         // Preveri, ali je datoteka mp3 ali flac, saj uporabljata razlicen nacin zapisovanja
-        // metapodatkov.
-        // Mozno je tudi, da je datoteka poskodovana ali pa sploh ni mp3 ali flac formata.
+        // metapodatkov. Mozno je tudi, da je datoteka poskodovana ali pa sploh ni tega formata.
         // Za vse druge formate datotek uporabniku javimo, da format ni podprt.
 
         // Vrne vse od zadnje pike naprej.
@@ -160,7 +151,6 @@ public class BrowseActivity extends AppCompatActivity implements AdapterCallback
         }
     }
 
-    // Odpre MetadataActivity za spreminjanje metapodatkov.
     private void runActivity(File file, Metadata metadata) {
         viewModel.setSelectedFile(file);
         metadata.writeImageToDisk(this);

@@ -9,17 +9,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-// Razred, ki vsebuje metapodatke o glasbenih datotekah.
 public class Metadata {
 
-    private String title; // Naslov skladbe.
-    private String artist; // Izvajalec skladbe.
-    private String album; // Album skladbe.
-    private int releaseYear; // Leto izdaje skladbe.
+    private String title;
+    private String artist;
+    private String album;
+    private int releaseYear;
 
-    private String imageMimeType; // MIME tip slike.
-    private byte[] imageData; // Podatki slike.
-    private String imagePath; // Pot do slike.
+    private String imageMimeType;
+    private byte[] imageData;
+    private String imagePath;
 
     private int id3Version = 0;
 
@@ -33,7 +32,7 @@ public class Metadata {
         this.imageData = imageData;
     }
 
-    // Zapise sliko na disk za lazje dostopanje.
+
     public void writeImageToDisk(Context context) {
         if (imageData != null) {
             File folder = context.getDir("pictures", Context.MODE_PRIVATE);
@@ -49,7 +48,6 @@ public class Metadata {
         }
     }
 
-    // Shrani metapodatke v Bundle za prenos po sistemu Android (Intent)
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putString("TITLE", title);
@@ -62,7 +60,6 @@ public class Metadata {
         return bundle;
     }
 
-    // Getterji in setterji.
     public void setId3Version(int version) {
         id3Version = version;
     }

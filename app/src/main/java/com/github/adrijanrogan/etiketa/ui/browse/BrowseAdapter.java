@@ -17,8 +17,6 @@ class BrowseAdapter extends RecyclerView.Adapter<BrowseAdapter.FileViewHolder> {
     private File[] files;
     private AdapterCallback callback;
 
-    // Razred FileViewHolder nosi podatke o enem elementu v seznamu.
-    // Nas seznam predstavlja polje File[].
 
     class FileViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -28,15 +26,12 @@ class BrowseAdapter extends RecyclerView.Adapter<BrowseAdapter.FileViewHolder> {
 
         FileViewHolder(View root) {
             super(root);
-            // Na vsak element v seznamu "polozimo" poslusalca. Ko se uporabnik dotakne
-            // enega elementa, dobimo povratni klic v spodnji metodi onClick(View v)
             root.setOnClickListener(this);
             this.fileIcon = root.findViewById(R.id.holder_icon);
             this.fileName = root.findViewById(R.id.holder_file_name);
             this.subFiles = root.findViewById(R.id.holder_sub_files);
         }
 
-        // Preko vmesnika AdapterCallback posljemo povratni klic v BrowseActivity
         @Override
         public void onClick(View v) {
             callback.onClickFile(getLayoutPosition());
@@ -100,7 +95,6 @@ class BrowseAdapter extends RecyclerView.Adapter<BrowseAdapter.FileViewHolder> {
 
     }
 
-    // RecyclerView mora vedeti, koliko elementov imamo.
     @Override
     public int getItemCount() {
         return files.length;
