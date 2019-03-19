@@ -10,4 +10,12 @@
     <string name="slika_ni_najdena">Slika v metapodatkih te datoteke ni bila najdena.</string>
     <string name="prazna_mapa">Mapa, v kateri se nahajate, je prazna.</string>
     <string name="internal_storage">Notranji pomnilnik</string>
+
+    <plurals name="steviloDatotek">
+        <item quantity="zero">%d datotek</item>
+        <item quantity="one">%d datoteka</item>
+        <item quantity="two">%d datoteki</item>
+        <item quantity="other">%d datotek</item>
+    </plurals>
+
 </resources>
