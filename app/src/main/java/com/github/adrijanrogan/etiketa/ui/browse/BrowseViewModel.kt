@@ -16,7 +16,7 @@ class BrowseViewModel : ViewModel() {
     // pa se aplikacija (kot je obicajno za tipko nazaj) zapre.
     private lateinit var root: File
     private lateinit var parent: File
-    private lateinit var children: Array<File>
+    lateinit var children: Array<File>
         private set
 
     private var selectedFile: File? = null

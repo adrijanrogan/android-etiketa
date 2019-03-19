@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Etiketa</string>
+    <string name="etiketa">Etiketa</string>
+
+    <string name="title">Titel</string>
+    <string name="artist">Artist</string>
+    <string name="album">Album</string>
+    <string name="releaseYear">Erscheinigungsjahr</string>
+
+    <string name="save">Speichern</string>
+
+    <string name="id3_older_format">Diese MP3 Dateio verwendet ein älteres Format, das eingebettete Bilder nicht unterstützt.</string>
+    <string name="picture_not_found">Eingebettetes Bild nicht gefunden.</string>
+
+    <string name="empty_folder">Diesee Mappe ist leer.</string>
+    <string name="internal_storage">Interne speicher</string>
+
+    <plurals name="numberOfFiles">
+        <item quantity="one">%d Datei</item>
+        <item quantity="other">%d Dateien</item>
+    </plurals>
+
+</resources>

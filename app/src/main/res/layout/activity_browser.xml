@@ -24,6 +24,6 @@
         android:layout_margin="32dp"
         android:textSize="18sp"
         android:visibility="gone"
-        android:text="@string/prazna_mapa"/>
+        android:text="@string/empty_folder"/>
 
 </FrameLayout>

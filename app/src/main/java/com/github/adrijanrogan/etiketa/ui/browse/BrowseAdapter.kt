@@ -52,7 +52,7 @@ class BrowseAdapter(
             holder.subFiles.visibility = View.VISIBLE
             val count = file.listFiles().size
             holder.subFiles.text = context.resources.getQuantityString(
-                    R.plurals.steviloDatotek, count, count)
+                    R.plurals.numberOfFiles, count, count)
         } else {
             holder.subFiles.visibility = View.GONE
         }

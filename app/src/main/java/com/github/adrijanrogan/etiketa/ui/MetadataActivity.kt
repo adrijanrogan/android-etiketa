@@ -58,12 +58,12 @@ class MetadataActivity : AppCompatActivity() {
             imageView.setImageBitmap(albumArt)
         } else if (file.name.endsWith(".mp3") && metadata.getInt("ID3") == 1) {
             val textImage = findViewById<TextView>(R.id.text_image)
-            textImage.setText(R.string.id3_starejsi_format)
+            textImage.setText(R.string.id3_older_format)
             imageView.visibility = View.GONE
             textImage.visibility = View.VISIBLE
         } else {
             val textImage = findViewById<TextView>(R.id.text_image)
-            textImage.setText(R.string.slika_ni_najdena)
+            textImage.setText(R.string.picture_not_found)
             imageView.visibility = View.GONE
             textImage.visibility = View.VISIBLE
         }
