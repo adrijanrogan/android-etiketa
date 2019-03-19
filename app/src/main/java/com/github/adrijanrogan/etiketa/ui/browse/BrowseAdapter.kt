@@ -39,7 +39,6 @@ class BrowseAdapter(
         return FileViewHolder(root)
     }
 
-    // Ta metoda se pokliče za vsak element v seznamu, ko bo element postal viden.
     // Tu določimo ikono, ki jo vidi uporabnik, glede na to, ali je to mapa, datoteka
     // ali glasbena datoteka. Uporabnik vidi tudi ime datoteke.
     override fun onBindViewHolder(holder: FileViewHolder, position: Int) {
@@ -47,7 +46,6 @@ class BrowseAdapter(
         val fileName = file.name
 
         holder.fileName.text = fileName
-        // Pravilno sklanjamo glede na stevilo datotek v mapi.
         if (file.isDirectory) {
             holder.subFiles.visibility = View.VISIBLE
             val count = file.listFiles().size

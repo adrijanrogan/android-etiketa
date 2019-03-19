@@ -19,6 +19,11 @@ import java.io.File
 
 class BrowseActivity : AppCompatActivity(), AdapterCallback {
 
+    companion object {
+        const val EXTENSION_MP3 = "mp3"
+        const val EXTENSION_FLAC = "flac"
+    }
+
     private lateinit  var viewModel: BrowseViewModel
 
     private var showHidden: Boolean = false // Ce false, skrijemo datoteke z zacetnico "."
@@ -26,8 +31,6 @@ class BrowseActivity : AppCompatActivity(), AdapterCallback {
     private var recyclerView: RecyclerView? = null
     private var noFiles: TextView? = null
 
-    // Vstopna tocka v BrowseActivity.
-    // Dolocimo postavitev, ki jo zelimo pokazati uporabniku (activity_browser).
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_browser)
@@ -43,8 +46,7 @@ class BrowseActivity : AppCompatActivity(), AdapterCallback {
         updateUI()
     }
 
-    // Klik na mapo -> pokazemo novo hierarhijo,
-    // sicer -> ce je datoteka podprta, omogocimo spreminjanje metapodatkov te datoteke.
+
     override fun onClickFile(position: Int) {
         val currentChildren = viewModel.children
         if (position <= currentChildren.size) {
@@ -94,50 +96,40 @@ class BrowseActivity : AppCompatActivity(), AdapterCallback {
             return
         }
 
-        val path = file.absolutePath
-        val metadata: Metadata
-
-        // Preveri, ali je datoteka mp3 ali flac, saj uporabljata razlicen nacin zapisovanja
-        // metapodatkov. Mozno je tudi, da je datoteka poskodovana ali pa sploh ni tega formata.
-        // Za vse druge formate datotek uporabniku javimo, da format ni podprt.
-
-        // Vrne vse od zadnje pike naprej.
-        // Primer: path = "home/adrijan/foo.mp3" --> format = ".mp3"
-        val format = path.substring(path.lastIndexOf("."))
-        val reader: Reader
-        when (format) {
-            ".mp3" -> {
-                reader = Mp3Reader(path)
-                when (reader.checkMetadata()) {
-                    Reader.NO_VALID_METADATA ->
-                        Toast.makeText(this, "Te datoteke ni bilo možno prebrati.",
-                            Toast.LENGTH_LONG).show()
-                    // Za ID3 verzija 1.
-                    Reader.METADATA_ID3v1 -> {
-                        metadata = reader.getMetadata()
-                        metadata.id3Version = 1
-                        runActivity(file, metadata)
-                    }
-                    // Za ID3 verzija 2.
-                    Reader.METADATA_ID3v2 -> {
-                        metadata = reader.getMetadata()
-                        metadata.id3Version = 2
-                        runActivity(file, metadata)
-                    }
-                }
+        when (file.extension) {
+            EXTENSION_MP3 -> {
+                val reader: Reader = Mp3Reader(file.absolutePath)
+                readMetadata(file, reader)
             }
-            ".flac" -> {
-                reader = FlacReader(path)
-                if (reader.checkMetadata() == Reader.NO_VALID_METADATA) {
-                    Toast.makeText(this, "Te datoteke ni bilo možno prebrati.",
-                            Toast.LENGTH_LONG).show()
-                } else {
-                    metadata = reader.getMetadata()
-                    runActivity(file, metadata)
-                }
+            EXTENSION_FLAC -> {
+                val reader: Reader = FlacReader(file.absolutePath)
+                readMetadata(file, reader)
             }
             else -> Toast.makeText(this, "Format te datoteke ni podprt.",
                     Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun readMetadata(file: File, reader: Reader) {
+        val metadata: Metadata
+        when (reader.checkMetadata()) {
+            Reader.NO_VALID_METADATA ->
+                Toast.makeText(this, "Te datoteke ni bilo možno prebrati.",
+                        Toast.LENGTH_LONG).show()
+            Reader.METADATA_ID3v1 -> {
+                metadata = reader.getMetadata()
+                metadata.id3Version = 1
+                runActivity(file, metadata)
+            }
+            Reader.METADATA_ID3v2 -> {
+                metadata = reader.getMetadata()
+                metadata.id3Version = 2
+                runActivity(file, metadata)
+            }
+            Reader.METADATA_XIPH_COMMENT -> {
+                metadata = reader.getMetadata()
+                runActivity(file, metadata)
+            }
         }
     }
 
