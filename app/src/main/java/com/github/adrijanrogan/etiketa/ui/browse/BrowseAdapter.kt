@@ -6,44 +6,34 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.adrijanrogan.etiketa.R
 import java.io.File
 
-class BrowseAdapter(
-        private val context: Context,
-        private val files: Array<File>,
-        private val callback: AdapterCallback)
-    : RecyclerView.Adapter<BrowseAdapter.FileViewHolder>() {
-    
-    inner class FileViewHolder(root: View) : RecyclerView.ViewHolder(root), View.OnClickListener {
+class BrowseAdapter(private val context: Context, private val callback: AdapterCallback) :
+        ListAdapter<File, BrowseAdapter.FileViewHolder>(DIFF_CALLBACK) {
 
-        var fileIcon: ImageView
-        var fileName: TextView
-        var subFiles: TextView
 
-        init {
-            root.setOnClickListener(this)
-            this.fileIcon = root.findViewById(R.id.holder_icon)
-            this.fileName = root.findViewById(R.id.holder_file_name)
-            this.subFiles = root.findViewById(R.id.holder_sub_files)
-        }
-
-        override fun onClick(v: View) {
-            callback.onClickFile(layoutPosition)
-        }
+    inner class FileViewHolder(val root: View) : RecyclerView.ViewHolder(root) {
+        var fileIcon: ImageView = root.findViewById(R.id.holder_icon)
+        var fileName: TextView = root.findViewById(R.id.holder_file_name)
+        var subFiles: TextView = root.findViewById(R.id.holder_sub_files)
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder {
         val root = LayoutInflater.from(parent.context).inflate(R.layout.holder_file, parent, false)
         return FileViewHolder(root)
     }
 
-    // Tu določimo ikono, ki jo vidi uporabnik, glede na to, ali je to mapa, datoteka
-    // ali glasbena datoteka. Uporabnik vidi tudi ime datoteke.
+
     override fun onBindViewHolder(holder: FileViewHolder, position: Int) {
-        val file = files[position]
+        val file = getItem(position)
         val fileName = file.name
+
+        holder.root.setOnClickListener { callback.onClickFile(getItem(position)) }
 
         holder.fileName.text = fileName
         if (file.isDirectory) {
@@ -66,8 +56,17 @@ class BrowseAdapter(
 
     }
 
-    override fun getItemCount(): Int {
-        return files.size
-    }
 
+    companion object {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<File> = object:DiffUtil.ItemCallback<File>() {
+            override fun areItemsTheSame(oldItem: File, newItem: File): Boolean {
+                return oldItem.name == newItem.name
+            }
+
+            override fun areContentsTheSame(oldItem: File, newItem: File): Boolean {
+                return oldItem.name == newItem.name &&
+                        oldItem.absolutePath == newItem.absolutePath
+            }
+        }
+    }
 }

@@ -3,12 +3,15 @@ package com.github.adrijanrogan.etiketa.ui.browse
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Fade
 import com.github.adrijanrogan.etiketa.R
 import com.github.adrijanrogan.etiketa.jni.FlacReader
 import com.github.adrijanrogan.etiketa.jni.Metadata
@@ -24,66 +27,58 @@ class BrowseActivity : AppCompatActivity(), AdapterCallback {
         const val EXTENSION_FLAC = "flac"
     }
 
+    private var showHidden: Boolean = false
+
     private lateinit  var viewModel: BrowseViewModel
-
-    private var showHidden: Boolean = false // Ce false, skrijemo datoteke z zacetnico "."
-
-    private var recyclerView: RecyclerView? = null
-    private var noFiles: TextView? = null
+    private lateinit var rootView: ViewGroup
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerAdapter: BrowseAdapter
+    private lateinit var noFiles: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_browser)
 
         viewModel = ViewModelProviders.of(this).get(BrowseViewModel::class.java)
+        viewModel.getFiles().observe(this, Observer { updateUI(it) })
 
-        showHidden = false
+        rootView = findViewById(R.id.root_view)
         recyclerView = findViewById(R.id.recycler)
         noFiles = findViewById(R.id.text_no_files)
-
-        val layoutManager = LinearLayoutManager(this)
-        recyclerView?.layoutManager = layoutManager
-        updateUI()
-    }
-
-
-    override fun onClickFile(position: Int) {
-        val currentChildren = viewModel.children
-        if (position <= currentChildren.size) {
-            val file = currentChildren[position]
-            if (file.isDirectory) {
-                viewModel.goDown(file)
-                updateUI()
-            } else {
-                checkFile(file)
-            }
+        recyclerView.also {
+            it.layoutManager = LinearLayoutManager(this)
+            recyclerAdapter = BrowseAdapter(this, this)
+            it.adapter = recyclerAdapter
         }
     }
 
-    private fun updateUI() {
-        viewModel.sortFiles()
-        viewModel.removeHiddenFiles()
-        val currentChildren = viewModel.children
 
-        supportActionBar?.title = viewModel.getTitle(this)
-
-        if (currentChildren.isEmpty()) {
-            recyclerView?.visibility = View.GONE
-            noFiles?.visibility = View.VISIBLE
+    override fun onClickFile(file: File) {
+        if (file.isDirectory) {
+            viewModel.toChildrenFiles(file)
         } else {
-            noFiles?.visibility = View.GONE
-            recyclerView?.visibility = View.VISIBLE
-            val adapter = BrowseAdapter(this, currentChildren, this)
-            recyclerView?.swapAdapter(adapter, true)
+            checkFile(file)
+        }
+    }
+
+    private fun updateUI(files: List<File>) {
+        if (files.isEmpty()) {
+            androidx.transition.TransitionManager.beginDelayedTransition(rootView, Fade())
+            recyclerView.visibility = View.GONE
+            noFiles.visibility = View.VISIBLE
+        } else {
+            androidx.transition.TransitionManager.beginDelayedTransition(rootView, Fade())
+            noFiles.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+            recyclerAdapter.submitList(files)
         }
     }
 
     override fun onBackPressed() {
-        if (viewModel.checkIfParentRoot()) {
+        if (viewModel.isRoot()) {
             super.onBackPressed()
         } else {
-            viewModel.goUp()
-            updateUI()
+            viewModel.toParentFiles()
         }
     }
 
@@ -91,8 +86,7 @@ class BrowseActivity : AppCompatActivity(), AdapterCallback {
     private fun checkFile(file: File) {
         // Morda je datoteka medtem bila izbrisana ali premaknjena.
         if (!file.exists()) {
-            viewModel.goUp()
-            updateUI()
+            viewModel.toParentFiles()
             return
         }
 
@@ -134,7 +128,6 @@ class BrowseActivity : AppCompatActivity(), AdapterCallback {
     }
 
     private fun runActivity(file: File, metadata: Metadata) {
-        viewModel.setSelectedFile(file)
         metadata.writeImageToDisk(this)
         val bundle = metadata.toBundle()
         val intent = Intent(this, MetadataActivity::class.java)

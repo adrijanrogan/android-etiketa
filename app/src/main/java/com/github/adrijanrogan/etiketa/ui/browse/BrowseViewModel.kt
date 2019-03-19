@@ -1,76 +1,48 @@
 package com.github.adrijanrogan.etiketa.ui.browse
 
-import android.content.Context
-import android.os.Environment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.github.adrijanrogan.etiketa.R
+import com.github.adrijanrogan.etiketa.repository.FileRepository
 import com.github.adrijanrogan.etiketa.util.FileComparator
 import java.io.File
-import java.util.*
 
 class BrowseViewModel : ViewModel() {
 
-    // Vedno hranimo referenco parent, da se lahko enostavneje vrnemo v visjo hierarhijo.
-    // Ce sta parent in root enaka, smo ze najvisje.
-    // Uporabnik se v visjo hierarhijo vraca s tipko nazaj, v primeru, da smo ze najvisje,
-    // pa se aplikacija (kot je obicajno za tipko nazaj) zapre.
-    private lateinit var root: File
-    private lateinit var parent: File
-    lateinit var children: Array<File>
-        private set
-
-    private var selectedFile: File? = null
-
-    init {
-        setup()
+    companion object {
+        const val SORTING_NAME_DESCENDING = 1
     }
 
-    private fun setup() {
-        root = File(Environment.getExternalStorageDirectory().path + "/")
-        parent = root
-        children = parent.listFiles()
+    private val repository = FileRepository()
+
+
+    fun getFiles(showHidden: Boolean = false, sortOrder: Int = SORTING_NAME_DESCENDING):
+            LiveData<List<File>> {
+        val filesLiveData = repository.getFiles()
+        return Transformations.map(filesLiveData) { files ->
+            transformFiles(files, showHidden, sortOrder) }
     }
 
-    internal fun goUp() {
-        parent = parent.parentFile
-        children = parent.listFiles()
-    }
-
-    internal fun goDown(file: File) {
-        parent = file
-        children = parent.listFiles()
-    }
-
-
-    internal fun checkIfParentRoot(): Boolean {
-        return parent.absolutePath == root.absolutePath
-    }
-
-    internal fun getTitle(context: Context): String {
-        return if (checkIfParentRoot()) {
-            context.getString(R.string.internal_storage)
-        } else {
-            parent.name
-        }
-    }
-
-
-    internal fun sortFiles() {
-        Arrays.sort(children, FileComparator())
-    }
-
-    internal fun removeHiddenFiles() {
-        val fileList = ArrayList(Arrays.asList(*children))
-        for (i in fileList.indices.reversed()) {
-            val file = fileList[i]
-            if (file.name.startsWith(".")) {
-                fileList.removeAt(i)
+    private fun transformFiles(files: List<File>, showHidden: Boolean, sortOrder: Int): List<File> {
+        val newList: MutableList<File> = ArrayList(files.size)
+        if (!showHidden) {
+            for (file in files) {
+                if (!file.isHidden) newList.add(file)
             }
         }
-        children = fileList.toTypedArray()
+        newList.sortWith(FileComparator())
+        return newList
     }
 
-    internal fun setSelectedFile(file: File) {
-        selectedFile = file
+    fun isRoot(): Boolean {
+        return repository.checkIfRoot()
+    }
+
+    fun toParentFiles() {
+        repository.toParentFiles()
+    }
+
+    fun toChildrenFiles(file: File) {
+        repository.toChildrenFiles(file)
     }
 }
