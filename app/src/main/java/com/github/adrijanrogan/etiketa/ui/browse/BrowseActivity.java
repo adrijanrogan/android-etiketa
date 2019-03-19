@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.github.adrijanrogan.etiketa.jni.FlacReader;
 import com.github.adrijanrogan.etiketa.jni.Metadata;
 import com.github.adrijanrogan.etiketa.jni.Mp3Reader;
+import com.github.adrijanrogan.etiketa.jni.Reader;
 import com.github.adrijanrogan.etiketa.ui.MetadataActivity;
 import com.github.adrijanrogan.etiketa.R;
 
@@ -112,35 +113,36 @@ public class BrowseActivity extends AppCompatActivity implements AdapterCallback
         // Vrne vse od zadnje pike naprej.
         // Primer: path = "home/adrijan/foo.mp3" --> format = ".mp3"
         String format = path.substring(path.lastIndexOf("."));
+        Reader reader;
         switch (format) {
             case ".mp3":
-                Mp3Reader mp3Reader = new Mp3Reader(path);
-                switch (mp3Reader.hasId3Tag()) {
-                    case 0:
+                reader = new Mp3Reader(path);
+                switch (reader.checkMetadata()) {
+                    case Reader.NO_VALID_METADATA:
                         Toast.makeText(this, "Te datoteke ni bilo možno prebrati.",
                                 Toast.LENGTH_LONG).show();
                         break;
                     // Za ID3 verzija 1.
-                    case 1:
-                        metadata = mp3Reader.getMetadata();
+                    case Reader.METADATA_ID3v1:
+                        metadata = reader.getMetadata();
                         metadata.setId3Version(1);
                         runActivity(file, metadata);
                         break;
                         // Za ID3 verzija 2.
-                    case 2:
-                        metadata = mp3Reader.getMetadata();
+                    case Reader.METADATA_ID3v2:
+                        metadata = reader.getMetadata();
                         metadata.setId3Version(2);
                         runActivity(file, metadata);
                         break;
                 }
                 break;
             case ".flac":
-                FlacReader flacReader = new FlacReader(path);
-                if (!flacReader.hasXiphComment()) {
+                reader = new FlacReader(path);
+                if (reader.checkMetadata() == Reader.NO_VALID_METADATA) {
                     Toast.makeText(this, "Te datoteke ni bilo možno prebrati.",
                             Toast.LENGTH_LONG).show();
                 } else {
-                    metadata = flacReader.getMetadata();
+                    metadata = reader.getMetadata();
                     runActivity(file, metadata);
                 }
                 break;

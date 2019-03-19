@@ -2,7 +2,7 @@ package com.github.adrijanrogan.etiketa.jni;
 
 import androidx.annotation.NonNull;
 
-public class FlacReader {
+public class FlacReader implements Reader {
 
     private String path;
 
@@ -11,10 +11,16 @@ public class FlacReader {
         System.loadLibrary("taglib");
     }
 
-    public boolean hasXiphComment() {
-        return hasXiphComment(path);
+    @Override
+    public int checkMetadata() {
+        if (hasXiphComment(path)) {
+            return Reader.METADATA_XIPH_COMMENT;
+        } else {
+            return Reader.NO_VALID_METADATA;
+        }
     }
 
+    @Override
     public Metadata getMetadata() {
         return readXiphComment(path);
     }
