@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Etiketa</string>
+    <string name="etiketa">Etiketa</string>
+
+    <string name="title">Naslov</string>
+    <string name="artist">Izvajalec</string>
+    <string name="album">Album</string>
+    <string name="releaseYear">Leto izdaje</string>
+
+    <string name="save">Shrani</string>
+
+    <string name="id3_older_format">Ta MP3 datoteka uporablja starejši format, ki ne podpira shranjevanja slike znotraj datoteke.</string>
+    <string name="picture_not_found">Slika v datoteki ni bila najdena.</string>
+
+    <string name="empty_folder">Ta mapa je prazna.</string>
+    <string name="internal_storage">Notranji pomnilnik</string>
+
+    <plurals name="numberOfFiles">
+        <item quantity="one">%d datoteka</item>
+        <item quantity="two">%d datoteki</item>
+        <item quantity="few">%d datotek</item>
+        <item quantity="other">%d datotek</item>
+    </plurals>
+
+</resources>

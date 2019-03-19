@@ -1,13 +1,23 @@
 <resources>
     <string name="app_name">Etiketa</string>
     <string name="etiketa">Etiketa</string>
-    <string name="naslov">Naslov</string>
-    <string name="izvajalec">Izvajalec</string>
+
+    <string name="title">Title</string>
+    <string name="artist">Artist</string>
     <string name="album">Album</string>
-    <string name="leto_izdaje">Leto izdaje</string>
-    <string name="shrani">Shrani</string>
-    <string name="id3_starejsi_format">Ta datoteka .mp3 uporablja starejši ID3 format, ki ne podpira možnosti shranjevanja slike znotraj datoteke.</string>
-    <string name="slika_ni_najdena">Slika v metapodatkih te datoteke ni bila najdena.</string>
-    <string name="prazna_mapa">Mapa, v kateri se nahajate, je prazna.</string>
-    <string name="internal_storage">Notranji pomnilnik</string>
+    <string name="releaseYear">Release year</string>
+
+    <string name="save">Save</string>
+
+    <string name="id3_older_format">This MP3 file uses an older metadata format, that does not support embedded images.</string>
+    <string name="picture_not_found">No embedded picture found.</string>
+
+    <string name="empty_folder">This folder is empty.</string>
+    <string name="internal_storage">Internal storage</string>
+
+    <plurals name="numberOfFiles">
+        <item quantity="one">%d file</item>
+        <item quantity="other">%d files</item>
+    </plurals>
+
 </resources>
