@@ -1,15 +1,29 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+
+        <item name="colorSecondary">@color/colorAccent</item>
+        <item name="colorSecondaryVariant">@color/colorAccentDark</item>
+        <item name="colorOnSecondary">@color/color_on_secondary</item>
+
+        <item name="android:colorBackground">@color/color_background</item>
+        <item name="colorSurface">@color/color_surface</item>
+        <item name="colorOnSurface">@color/color__on_surface</item>
     </style>
 
-    <style name="AppTheme.SmallBoldText" parent="TextAppearance.MaterialComponents.Caption">
+    <style name="AppTheme.Text.Body3" parent="TextAppearance.MaterialComponents.Caption">
         <item name="android:textSize">14sp</item>
     </style>
+
+    <style name="AppTheme.Text.Body3.Light" parent="AppTheme.Text.Body3">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/colorOnPrimary</item>
+    </style>
+
 
 </resources>

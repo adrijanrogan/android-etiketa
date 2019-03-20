@@ -101,12 +101,12 @@ class MetadataActivity : AppCompatActivity() {
 
     private fun postResult(s: Int) {
         when (s) {
-            0 -> Toast.makeText(this, "Napaka pri shranjevanju",
+            0 -> Toast.makeText(this, getString(R.string.error_occured),
                     Toast.LENGTH_LONG).show()
-            1 -> Toast.makeText(this, "Metapodatki uspešno shranjeni",
-                    Toast.LENGTH_SHORT).show()
-            2 -> Toast.makeText(this, "Metapodatki so ostali nespremenjeni",
-                    Toast.LENGTH_SHORT).show()
+            1 -> Toast.makeText(this, getString(R.string.successfully_saved),
+                    Toast.LENGTH_LONG).show()
+            2 -> Toast.makeText(this, getString(R.string.remained_unchanged),
+                    Toast.LENGTH_LONG).show()
         }
     }
 

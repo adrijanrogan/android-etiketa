@@ -9,11 +9,16 @@
 
     <string name="save">Save</string>
 
+    <string name="successfully_saved">Successfully saved</string>
+    <string name="error_occured">An error occurred</string>
+
     <string name="id3_older_format">This MP3 file uses an older metadata format, that does not support embedded images.</string>
     <string name="picture_not_found">No embedded picture found.</string>
 
     <string name="empty_folder">This folder is empty.</string>
     <string name="internal_storage">Internal storage</string>
+
+    <string name="settings">Settings</string>
 
     <plurals name="numberOfFiles">
         <item quantity="one">%d file</item>
@@ -21,5 +26,7 @@
     </plurals>
 
     <string name="numberOfFilesEmpty">Empty folder</string>
+    <string name="node_name">Node name</string>
+    <string name="remained_unchanged">Data has remained unchanged</string>
 
 </resources>

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +32,12 @@ class BrowseActivity : AppCompatActivity(), AdapterCallback {
 
     private lateinit  var viewModel: BrowseViewModel
     private lateinit var rootView: ViewGroup
+    private lateinit var toolbar: Toolbar
+
+    private lateinit var treeRecyclerView: RecyclerView
+    private lateinit var treeRecyclerAdapter: BrowseTreeAdapter
+
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerAdapter: BrowseAdapter
     private lateinit var noFiles: TextView
@@ -40,16 +47,29 @@ class BrowseActivity : AppCompatActivity(), AdapterCallback {
         setContentView(R.layout.activity_browser)
 
         viewModel = ViewModelProviders.of(this).get(BrowseViewModel::class.java)
-        viewModel.getFiles().observe(this, Observer { updateUI(it) })
 
-        rootView = findViewById(R.id.root_view)
-        recyclerView = findViewById(R.id.recycler)
+        rootView = findViewById(R.id.browser_root_view)
+
+        toolbar = findViewById(R.id.browser_toolbar)
+        toolbar.inflateMenu(R.menu.browser_toolbar_menu)
+
+        treeRecyclerView = findViewById(R.id.browser_tree_recycler)
+        treeRecyclerView.also {
+            it.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            treeRecyclerAdapter = BrowseTreeAdapter(this)
+            it.adapter = treeRecyclerAdapter
+        }
+
+        recyclerView = findViewById(R.id.browser_recycler)
         noFiles = findViewById(R.id.text_no_files)
         recyclerView.also {
             it.layoutManager = LinearLayoutManager(this)
             recyclerAdapter = BrowseAdapter(this, this)
             it.adapter = recyclerAdapter
         }
+
+        viewModel.getFiles().observe(this, Observer { updateUI(it) })
+        viewModel.getTree().observe(this, Observer { treeRecyclerAdapter.submitList(it) })
     }
 
 

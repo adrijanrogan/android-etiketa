@@ -20,5 +20,10 @@
         <item quantity="other">%d Dateien</item>
     </plurals>
     <string name="numberOfFilesEmpty">Leer Mappe</string>
+    <string name="settings">Einstellungen</string>
+    <string name="node_name">Knotenpunktname</string>
+    <string name="successfully_saved">Erfolgreich gespeichert</string>
+    <string name="error_occured">Ein Fehler ist aufgetreten</string>
+    <string name="remained_unchanged">Die Daten sind unvenändert geblieben</string>
 
 </resources>

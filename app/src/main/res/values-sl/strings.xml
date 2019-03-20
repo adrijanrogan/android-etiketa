@@ -22,5 +22,10 @@
         <item quantity="other">%d datotek</item>
     </plurals>
     <string name="numberOfFilesEmpty">Prazna mapa</string>
+    <string name="settings">Nastavitve</string>
+    <string name="node_name">Ime vozlišča</string>
+    <string name="successfully_saved">Uspešno shranjeno</string>
+    <string name="error_occured">Prišlo je do napake</string>
+    <string name="remained_unchanged">Podatki so ostali nespremenjeni</string>
 
 </resources>

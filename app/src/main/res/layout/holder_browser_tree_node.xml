@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/holder_tree_node_root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp"
+    android:gravity="center_vertical"
+    android:background="@color/colorPrimary"
+    tools:ignore="RtlSymmetry">
+
+    <TextView
+        android:id="@+id/holder_tree_node_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        style="@style/AppTheme.Text.Body3.Light"
+        android:text="@string/node_name"/>
+
+    <ImageView
+        android:id="@+id/holder_tree_node_chevron"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="4dp"
+        android:src="@drawable/ic_chevron_right_white"/>
+
+
+</LinearLayout>

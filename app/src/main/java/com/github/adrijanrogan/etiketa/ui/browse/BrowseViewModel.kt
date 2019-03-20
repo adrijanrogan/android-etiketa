@@ -15,6 +15,9 @@ class BrowseViewModel : ViewModel() {
 
     private val repository = FileRepository()
 
+    fun getTree(): LiveData<List<File>> {
+        return repository.getTree()
+    }
 
     fun getFiles(showHidden: Boolean = false, sortOrder: Int = SORTING_NAME_DESCENDING):
             LiveData<List<File>> {

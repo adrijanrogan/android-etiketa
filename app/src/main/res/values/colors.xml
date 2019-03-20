@@ -2,5 +2,23 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+
     <color name="colorAccent">#FF4081</color>
+    <color name="colorAccentDark">#FF206A</color>
+    <color name="color_on_secondary">#FFFFFF</color>
+
+    <color name="color_background">#FFFFFF</color>
+    <color name="color_surface">#FFFFFF</color>
+    <color name="color__on_surface">#000000</color>
+
+    <color name="color_background_light">#F5F5F5</color>
+
+    <color name="primaryTextLightBackground">#de000000</color>
+    <color name="secondaryTextLightBackground">#99000000</color>
+
+    <color name="dividerColor">#1e000000</color>
+
+    <color name="primaryTextDarkBackground">#ffffffff</color>
+    <color name="secondaryTextDarkBackground">#b2ffffff</color>
 </resources>

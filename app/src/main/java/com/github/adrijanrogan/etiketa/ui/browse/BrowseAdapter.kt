@@ -60,13 +60,14 @@ class BrowseAdapter(private val context: Context, private val callback: AdapterC
 
     companion object {
         val DIFF_CALLBACK: DiffUtil.ItemCallback<File> = object:DiffUtil.ItemCallback<File>() {
+            // Must compare paths, otherwise folders with same names cause trouble
             override fun areItemsTheSame(oldItem: File, newItem: File): Boolean {
-                return oldItem.name == newItem.name
+                return oldItem.name == newItem.name &&
+                        oldItem.absolutePath == newItem.absolutePath
             }
 
             override fun areContentsTheSame(oldItem: File, newItem: File): Boolean {
-                return oldItem.name == newItem.name &&
-                        oldItem.absolutePath == newItem.absolutePath
+                return areItemsTheSame(oldItem, newItem)
             }
         }
     }
