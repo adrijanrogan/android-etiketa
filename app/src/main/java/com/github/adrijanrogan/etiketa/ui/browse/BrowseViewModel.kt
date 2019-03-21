@@ -33,7 +33,7 @@ class BrowseViewModel : ViewModel() {
                 if (!file.isHidden) newList.add(file)
             }
         }
-        newList.sortWith(FileComparator())
+        newList.sortWith(FileComparator(FileComparator.COMPARISON_FOLDER_NAME))
         return newList
     }
 

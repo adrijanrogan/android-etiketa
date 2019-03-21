@@ -36,6 +36,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!--suppress AndroidDomInspection -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/browser_recycler"
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.github.adrijanrogan.etiketa.ui
+package com.github.adrijanrogan.etiketa.ui.views
 
 import android.content.Context
 import android.util.AttributeSet

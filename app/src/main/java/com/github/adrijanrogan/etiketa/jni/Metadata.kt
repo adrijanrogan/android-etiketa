@@ -9,11 +9,16 @@ import java.io.IOException
 // TODO: Enforce non null values
 class Metadata(val title: String?, val artist: String?, val album: String?, val releaseYear: Int,
                val imageMimeType: String?, val imageData: ByteArray?) {
+
     var imagePath: String? = null
         private set
 
     var id3Version = 0
 
+    fun compareTo(m: Metadata): Boolean {
+        return title == m.title && artist == m.artist && album == m.album &&
+                releaseYear == m.releaseYear
+    }
 
     fun writeImageToDisk(context: Context) {
         if (imageData != null) {

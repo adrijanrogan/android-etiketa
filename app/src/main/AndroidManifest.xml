@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.github.adrijanrogan.etiketa">
 
-    <!-- Za branje in pisanje rabimo pravico -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -11,11 +11,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-        <!-- StartActivity se pokaže uporabniku ob zagonu aplikacije -->
-        <!-- noHistory poskrbi, da se uporabnik ne more vrniti v StartActivity, ko jo zapusti -->
-        <activity android:name="com.github.adrijanrogan.etiketa.ui.StartActivity"
+        <activity android:name="com.github.adrijanrogan.etiketa.ui.start.StartActivity"
             android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,9 +23,8 @@
             </intent-filter>
         </activity>
 
-        <!-- V AndroidManifest moramo deklarirati vse svoje komponente -->
         <activity android:name="com.github.adrijanrogan.etiketa.ui.browse.BrowseActivity" />
-        <activity android:name="com.github.adrijanrogan.etiketa.ui.MetadataActivity" />
+        <activity android:name="com.github.adrijanrogan.etiketa.ui.edit.EditActivity" />
 
     </application>
 

@@ -1,4 +1,4 @@
-package com.github.adrijanrogan.etiketa.ui
+package com.github.adrijanrogan.etiketa.ui.start
 
 import android.Manifest
 import android.content.Intent
@@ -13,8 +13,6 @@ import com.github.adrijanrogan.etiketa.ui.browse.BrowseActivity
 
 class StartActivity : AppCompatActivity() {
 
-    // Nimamo dovoljenja -> zahtevamo
-    // sicer -> zazenemo BrowseActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)

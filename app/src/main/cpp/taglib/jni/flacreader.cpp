@@ -14,20 +14,20 @@ extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_github_adrijanrogan_etiketa_jni_FlacReader_readXiphComment(JNIEnv *env, jobject instance,
                                                                     jstring filename_) {
-    const char *filename = env->GetStringUTFChars(filename_, 0);
+    const char *filename = env->GetStringUTFChars(filename_, nullptr);
 
     FLAC::File file(filename, false, AudioProperties::Average);
     jclass clazz = env->FindClass("com/github/adrijanrogan/etiketa/jni/Metadata");
-    jmethodID methodId = env->
-            GetMethodID(clazz, "<init>",
-                        "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;[B)V");
+    jmethodID methodId = env->GetMethodID(
+            clazz, "<init>",
+            "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;[B)V");
 
     std::string title;
     std::string artist;
     std::string album;
     int year = -1;
     std::string mimeType;
-    jbyteArray imageData_ = NULL;
+    jbyteArray imageData_ = nullptr;
 
     if (file.isValid() && file.hasXiphComment()) {
         XiphComment *tag = file.xiphComment();
@@ -37,21 +37,21 @@ Java_com_github_adrijanrogan_etiketa_jni_FlacReader_readXiphComment(JNIEnv *env,
             String string = fieldListMap["TITLE"].toString();
             title = string.to8Bit(true);
         } else {
-            title = "<unknown>";
+            title = "";
         }
 
         if (tag->contains("ARTIST")) {
             String string = fieldListMap["ARTIST"].toString();
             artist = string.toCString(true);
         } else {
-            artist = "<unknown>";
+            artist = "";
         }
 
         if (tag->contains("ALBUM")) {
             String string = fieldListMap["ALBUM"].toString();
             album = string.toCString(true);
         } else {
-            album = "<unknown>";
+            album = "";
         }
 
         if (tag->contains("YEAR")) {
@@ -91,7 +91,7 @@ extern "C"
 JNIEXPORT jboolean JNICALL
 Java_com_github_adrijanrogan_etiketa_jni_FlacReader_hasXiphComment(JNIEnv *env, jobject instance,
                                                                    jstring filename_) {
-    const char *filename = env->GetStringUTFChars(filename_, 0);
+    const char *filename = env->GetStringUTFChars(filename_, nullptr);
 
     FLAC::File file(filename, false, AudioProperties::Average);
     if (file.isValid()) {

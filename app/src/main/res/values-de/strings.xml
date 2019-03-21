@@ -9,7 +9,7 @@
 
     <string name="save">Speichern</string>
 
-    <string name="id3_older_format">Diese MP3 Dateio verwendet ein älteres Format, das eingebettete Bilder nicht unterstützt.</string>
+    <string name="id3_older_format">Diese MP3 Datei verwendet ein älteres Format, das eingebettete Bilder nicht unterstützt.</string>
     <string name="picture_not_found">Eingebettetes Bild nicht gefunden.</string>
 
     <string name="empty_folder">Diese Mappe ist leer.</string>
@@ -25,5 +25,8 @@
     <string name="successfully_saved">Erfolgreich gespeichert</string>
     <string name="error_occured">Ein Fehler ist aufgetreten</string>
     <string name="remained_unchanged">Die Daten sind unvenändert geblieben</string>
+    <string name="tag_editor">Tag-Editor</string>
+    <string name="format_unsupported">Dieses Dateiformat wird nicht unterstüzt</string>
+    <string name="unable_to_read">Dieses Datei kann nicht gelesen werden</string>
 
 </resources>

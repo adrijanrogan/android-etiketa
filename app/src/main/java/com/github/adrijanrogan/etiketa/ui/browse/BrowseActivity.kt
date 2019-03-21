@@ -18,7 +18,7 @@ import com.github.adrijanrogan.etiketa.jni.FlacReader
 import com.github.adrijanrogan.etiketa.jni.Metadata
 import com.github.adrijanrogan.etiketa.jni.Mp3Reader
 import com.github.adrijanrogan.etiketa.jni.Reader
-import com.github.adrijanrogan.etiketa.ui.MetadataActivity
+import com.github.adrijanrogan.etiketa.ui.edit.EditActivity
 import java.io.File
 
 class BrowseActivity : AppCompatActivity(), AdapterCallback {
@@ -45,13 +45,11 @@ class BrowseActivity : AppCompatActivity(), AdapterCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_browser)
-
-        viewModel = ViewModelProviders.of(this).get(BrowseViewModel::class.java)
-
         rootView = findViewById(R.id.browser_root_view)
-
         toolbar = findViewById(R.id.browser_toolbar)
         toolbar.inflateMenu(R.menu.browser_toolbar_menu)
+
+        viewModel = ViewModelProviders.of(this).get(BrowseViewModel::class.java)
 
         treeRecyclerView = findViewById(R.id.browser_tree_recycler)
         treeRecyclerView.also {
@@ -104,53 +102,52 @@ class BrowseActivity : AppCompatActivity(), AdapterCallback {
 
 
     private fun checkFile(file: File) {
-        // Morda je datoteka medtem bila izbrisana ali premaknjena.
         if (!file.exists()) {
             viewModel.toParentFiles()
             return
         }
 
+        val reader: Reader
         when (file.extension) {
-            EXTENSION_MP3 -> {
-                val reader: Reader = Mp3Reader(file.absolutePath)
-                readMetadata(file, reader)
-            }
-            EXTENSION_FLAC -> {
-                val reader: Reader = FlacReader(file.absolutePath)
-                readMetadata(file, reader)
-            }
-            else -> Toast.makeText(this, "Format te datoteke ni podprt.",
-                    Toast.LENGTH_LONG).show()
+            EXTENSION_MP3 -> reader = Mp3Reader(file.absolutePath)
+            EXTENSION_FLAC -> reader = FlacReader(file.absolutePath)
+            else -> {
+                Toast.makeText(this, getString(R.string.format_unsupported),
+                        Toast.LENGTH_LONG).show()
+                return
+           }
         }
+
+        readMetadata(file, reader)
     }
 
     private fun readMetadata(file: File, reader: Reader) {
-        val metadata: Metadata
-        when (reader.checkMetadata()) {
-            Reader.NO_VALID_METADATA ->
-                Toast.makeText(this, "Te datoteke ni bilo možno prebrati.",
-                        Toast.LENGTH_LONG).show()
+        val check = reader.checkMetadata()
+        if (check == Reader.NO_VALID_METADATA) {
+            Toast.makeText(this, getString(R.string.unable_to_read),
+                    Toast.LENGTH_LONG).show()
+            return
+        }
+
+        val metadata = reader.getMetadata()
+        // TODO: Save images to disk and write entries to the Room database
+        // (sometimes the picture takes a long time to save)
+        metadata.writeImageToDisk(this)
+        when (check) {
             Reader.METADATA_ID3v1 -> {
-                metadata = reader.getMetadata()
                 metadata.id3Version = 1
-                runActivity(file, metadata)
             }
             Reader.METADATA_ID3v2 -> {
-                metadata = reader.getMetadata()
                 metadata.id3Version = 2
-                runActivity(file, metadata)
-            }
-            Reader.METADATA_XIPH_COMMENT -> {
-                metadata = reader.getMetadata()
-                runActivity(file, metadata)
             }
         }
+
+        runActivity(file, metadata)
     }
 
     private fun runActivity(file: File, metadata: Metadata) {
-        metadata.writeImageToDisk(this)
         val bundle = metadata.toBundle()
-        val intent = Intent(this, MetadataActivity::class.java)
+        val intent = Intent(this, EditActivity::class.java)
         intent.putExtra("METADATA", bundle)
         intent.putExtra("FILE", file)
         startActivity(intent)

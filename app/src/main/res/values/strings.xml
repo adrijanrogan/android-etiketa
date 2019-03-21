@@ -28,5 +28,8 @@
     <string name="numberOfFilesEmpty">Empty folder</string>
     <string name="node_name">Node name</string>
     <string name="remained_unchanged">Data has remained unchanged</string>
+    <string name="tag_editor">Tag editor</string>
+    <string name="format_unsupported">This file format is unsupported</string>
+    <string name="unable_to_read">This file cannot be read</string>
 
 </resources>

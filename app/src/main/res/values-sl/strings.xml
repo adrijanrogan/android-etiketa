@@ -27,5 +27,8 @@
     <string name="successfully_saved">Uspešno shranjeno</string>
     <string name="error_occured">Prišlo je do napake</string>
     <string name="remained_unchanged">Podatki so ostali nespremenjeni</string>
+    <string name="tag_editor">Urejevalec značk</string>
+    <string name="unable_to_read">Te datoteke ni možno prebrati</string>
+    <string name="format_unsupported">Ta datotečni format ni podprt</string>
 
 </resources>
