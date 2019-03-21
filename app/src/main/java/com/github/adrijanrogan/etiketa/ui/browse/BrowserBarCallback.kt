@@ -2,8 +2,7 @@ package com.github.adrijanrogan.etiketa.ui.browse
 
 import java.io.File
 
-interface AdapterCallback {
+interface BrowserBarCallback {
 
-    fun onClickFile(file: File)
-
+    fun onClickTreeFile(file: File)
 }

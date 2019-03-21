@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.adrijanrogan.etiketa.R
 import java.io.File
 
-class BrowseTreeAdapter(private val context: Context) :
-        ListAdapter<File, BrowseTreeAdapter.TreeNodeViewHolder>(DIFF_CALLBACK) {
+class BrowserBarAdapter(private val context: Context, private val callback: BrowserBarCallback) :
+        ListAdapter<File, BrowserBarAdapter.TreeNodeViewHolder>(DIFF_CALLBACK) {
 
 
-    inner class TreeNodeViewHolder(root: View) : RecyclerView.ViewHolder(root) {
+    inner class TreeNodeViewHolder(val root: View) : RecyclerView.ViewHolder(root) {
         var nodeName: TextView = root.findViewById(R.id.holder_tree_node_name)
     }
 
@@ -28,6 +28,7 @@ class BrowseTreeAdapter(private val context: Context) :
 
 
     override fun onBindViewHolder(holder: TreeNodeViewHolder, position: Int) {
+        holder.root.setOnClickListener { callback.onClickTreeFile(getItem(position)) }
         if (position == 0) holder.nodeName.text = context.getString(R.string.internal_storage)
         else {
             val file = getItem(position)

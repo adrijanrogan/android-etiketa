@@ -21,7 +21,7 @@ import com.github.adrijanrogan.etiketa.jni.Reader
 import com.github.adrijanrogan.etiketa.ui.edit.EditActivity
 import java.io.File
 
-class BrowseActivity : AppCompatActivity(), AdapterCallback {
+class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback {
 
     companion object {
         const val EXTENSION_MP3 = "mp3"
@@ -34,8 +34,8 @@ class BrowseActivity : AppCompatActivity(), AdapterCallback {
     private lateinit var rootView: ViewGroup
     private lateinit var toolbar: Toolbar
 
-    private lateinit var treeRecyclerView: RecyclerView
-    private lateinit var treeRecyclerAdapter: BrowseTreeAdapter
+    private lateinit var barRecyclerView: RecyclerView
+    private lateinit var barRecyclerAdapter: BrowserBarAdapter
 
 
     private lateinit var recyclerView: RecyclerView
@@ -51,11 +51,11 @@ class BrowseActivity : AppCompatActivity(), AdapterCallback {
 
         viewModel = ViewModelProviders.of(this).get(BrowseViewModel::class.java)
 
-        treeRecyclerView = findViewById(R.id.browser_tree_recycler)
-        treeRecyclerView.also {
+        barRecyclerView = findViewById(R.id.browser_bar_recycler)
+        barRecyclerView.also {
             it.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-            treeRecyclerAdapter = BrowseTreeAdapter(this)
-            it.adapter = treeRecyclerAdapter
+            barRecyclerAdapter = BrowserBarAdapter(this, this)
+            it.adapter = barRecyclerAdapter
         }
 
         recyclerView = findViewById(R.id.browser_recycler)
@@ -67,7 +67,7 @@ class BrowseActivity : AppCompatActivity(), AdapterCallback {
         }
 
         viewModel.getFiles().observe(this, Observer { updateUI(it) })
-        viewModel.getTree().observe(this, Observer { treeRecyclerAdapter.submitList(it) })
+        viewModel.getTree().observe(this, Observer { barRecyclerAdapter.submitList(it) })
     }
 
 
@@ -77,6 +77,10 @@ class BrowseActivity : AppCompatActivity(), AdapterCallback {
         } else {
             checkFile(file)
         }
+    }
+
+    override fun onClickTreeFile(file: File) {
+        if (file.isDirectory) viewModel.toChildrenFiles(file)
     }
 
     private fun updateUI(files: List<File>) {

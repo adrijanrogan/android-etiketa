@@ -26,7 +26,7 @@
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/browser_tree_recycler"
+            android:id="@+id/browser_bar_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="noScroll"

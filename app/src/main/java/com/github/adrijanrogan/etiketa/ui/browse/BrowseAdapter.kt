@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.adrijanrogan.etiketa.R
 import java.io.File
 
-class BrowseAdapter(private val context: Context, private val callback: AdapterCallback) :
+class BrowseAdapter(private val context: Context, private val callback: BrowserCallback) :
         ListAdapter<File, BrowseAdapter.FileViewHolder>(DIFF_CALLBACK) {
 
 
