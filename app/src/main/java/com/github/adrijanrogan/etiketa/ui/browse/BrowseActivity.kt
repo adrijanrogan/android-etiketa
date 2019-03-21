@@ -1,7 +1,9 @@
 package com.github.adrijanrogan.etiketa.ui.browse
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -19,6 +21,7 @@ import com.github.adrijanrogan.etiketa.jni.Metadata
 import com.github.adrijanrogan.etiketa.jni.Mp3Reader
 import com.github.adrijanrogan.etiketa.jni.Reader
 import com.github.adrijanrogan.etiketa.ui.edit.EditActivity
+import com.github.adrijanrogan.etiketa.util.FileComparator
 import java.io.File
 
 class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback {
@@ -37,7 +40,6 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
     private lateinit var barRecyclerView: RecyclerView
     private lateinit var barRecyclerAdapter: BrowserBarAdapter
 
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerAdapter: BrowseAdapter
     private lateinit var noFiles: TextView
@@ -48,6 +50,7 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
         rootView = findViewById(R.id.browser_root_view)
         toolbar = findViewById(R.id.browser_toolbar)
         toolbar.inflateMenu(R.menu.browser_toolbar_menu)
+        toolbar.setOnMenuItemClickListener { onMenuItemClick(it) }
 
         viewModel = ViewModelProviders.of(this).get(BrowseViewModel::class.java)
 
@@ -66,8 +69,50 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
             it.adapter = recyclerAdapter
         }
 
-        viewModel.getFiles().observe(this, Observer { updateUI(it) })
-        viewModel.getTree().observe(this, Observer { barRecyclerAdapter.submitList(it) })
+        observeLiveData()
+    }
+
+    private fun observeLiveData() {
+        val sp = getSharedPreferences("browse_settings", Context.MODE_PRIVATE)
+        val hidden = sp.getBoolean("BROWSE_SHOW_HIDDEN", false)
+        val mode = sp.getInt("BROWSE_SORT_MODE", FileComparator.SORT_FOLDER_NAME)
+        viewModel.getFiles().removeObservers(this)
+        viewModel.getFiles(hidden, mode).observe(this, Observer { updateUI(it) })
+        viewModel.getFiles().removeObservers(this)
+        viewModel.getTree().observe(this, Observer { updateBarUI(it) })
+    }
+
+
+    private fun onMenuItemClick(menuItem: MenuItem): Boolean {
+        val id = menuItem.itemId
+        val editor = getSharedPreferences("browse_settings", Context.MODE_PRIVATE).edit()
+        // TODO: How to map all choices as efficient as possible?
+        when (id) {
+            R.id.browser_menu_folders -> {
+                menuItem.isChecked = !menuItem.isChecked
+                editor.putBoolean("BROWSE_FOLDERS_EXTRA", menuItem.isChecked)
+            }
+            R.id.browser_menu_sort_hidden -> {
+                menuItem.isChecked = !menuItem.isChecked
+                editor.putBoolean("BROWSE_SHOW_HIDDEN", menuItem.isChecked)
+            }
+            R.id.browser_menu_sort_extension -> {
+                menuItem.isChecked = !menuItem.isChecked
+                editor.putBoolean("BROWSE_SORT_BY_EXTENSIONS", menuItem.isChecked)
+            }
+            R.id.browser_menu_sort_ascending -> {
+                menuItem.isChecked = true
+                editor.putInt("BROWSE_SORT_MODE", FileComparator.SORT_FOLDER_NAME)
+                viewModel.getFiles().removeObservers(this)
+            }
+            R.id.browser_menu_sort_descending -> {
+                menuItem.isChecked = true
+                editor.putInt("BROWSE_SORT_MODE", FileComparator.SORT_FOLDER_NAME_REVERSED)
+            }
+        }
+        editor.apply()
+        observeLiveData()
+        return true
     }
 
 
@@ -94,6 +139,10 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
             recyclerView.visibility = View.VISIBLE
             recyclerAdapter.submitList(files)
         }
+    }
+
+    private fun updateBarUI(files: List<File>) {
+        barRecyclerAdapter.submitList(files)
     }
 
     override fun onBackPressed() {

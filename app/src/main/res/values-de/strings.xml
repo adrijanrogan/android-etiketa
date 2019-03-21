@@ -12,7 +12,7 @@
     <string name="id3_older_format">Diese MP3 Datei verwendet ein älteres Format, das eingebettete Bilder nicht unterstützt.</string>
     <string name="picture_not_found">Eingebettetes Bild nicht gefunden.</string>
 
-    <string name="empty_folder">Diese Mappe ist leer.</string>
+    <string name="empty_folder">Diese Ordner ist leer.</string>
     <string name="internal_storage">Interne speicher</string>
 
     <plurals name="numberOfFiles">
@@ -28,5 +28,10 @@
     <string name="tag_editor">Tag-Editor</string>
     <string name="format_unsupported">Dieses Dateiformat wird nicht unterstüzt</string>
     <string name="unable_to_read">Dieses Datei kann nicht gelesen werden</string>
+    <string name="group_folders">Ordner grupieren</string>
+    <string name="name_ascending">Name aufsteigend</string>
+    <string name="name_descending">Name absteigend</string>
+    <string name="sort_order">Sortierreihenfolge</string>
+    <string name="show_hidden">Versteckte Dateien anzeigen</string>
 
 </resources>

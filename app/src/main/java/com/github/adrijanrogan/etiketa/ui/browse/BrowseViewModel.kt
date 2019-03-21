@@ -9,17 +9,13 @@ import java.io.File
 
 class BrowseViewModel : ViewModel() {
 
-    companion object {
-        const val SORTING_NAME_DESCENDING = 1
-    }
-
     private val repository = FileRepository()
 
     fun getTree(): LiveData<List<File>> {
         return repository.getTree()
     }
 
-    fun getFiles(showHidden: Boolean = false, sortOrder: Int = SORTING_NAME_DESCENDING):
+    fun getFiles(showHidden: Boolean = false, sortOrder: Int = FileComparator.SORT_FOLDER_NAME):
             LiveData<List<File>> {
         val filesLiveData = repository.getFiles()
         return Transformations.map(filesLiveData) { files ->
@@ -32,8 +28,15 @@ class BrowseViewModel : ViewModel() {
             for (file in files) {
                 if (!file.isHidden) newList.add(file)
             }
+        } else {
+            newList.addAll(files)
         }
-        newList.sortWith(FileComparator(FileComparator.COMPARISON_FOLDER_NAME))
+
+        when (sortOrder) {
+            FileComparator.SORT_FOLDER_NAME -> newList.sortWith(FileComparator(sortOrder))
+            FileComparator.SORT_FOLDER_NAME_REVERSED -> newList.sortWith(FileComparator(sortOrder))
+            else -> newList.sortWith(FileComparator(FileComparator.SORT_FOLDER_NAME))
+        }
         return newList
     }
 

@@ -3,6 +3,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/browser_menu_sort_order"
+        app:showAsAction="never"
+        android:title="@string/sort_order" >
+
+        <menu>
+
+            <item
+                android:id="@+id/browser_menu_folders"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/group_folders" />
+
+            <item
+                android:id="@+id/browser_menu_sort_extension"
+                android:checkable="true"
+                android:checked="false"
+                android:visible="false"
+                android:title="" />
+
+            <item
+                android:id="@+id/browser_menu_sort_hidden"
+                android:checkable="true"
+                android:checked="false"
+                android:title="@string/show_hidden" />
+
+            <group
+                android:checkableBehavior="single"
+                android:enabled="true">
+                <item
+                    android:id="@+id/browser_menu_sort_ascending"
+                    android:title="@string/name_ascending" />
+
+                <item
+                    android:id="@+id/browser_menu_sort_descending"
+                    android:title="@string/name_descending" />
+            </group>
+
+        </menu>
+
+    </item>
+
+    <item
         android:id="@+id/browser_menu_settings"
         app:showAsAction="never"
         android:title="@string/settings" />

@@ -31,5 +31,10 @@
     <string name="tag_editor">Tag editor</string>
     <string name="format_unsupported">This file format is unsupported</string>
     <string name="unable_to_read">This file cannot be read</string>
+    <string name="sort_order">Sort order</string>
+    <string name="group_folders">Group folders</string>
+    <string name="show_hidden">Show hidden</string>
+    <string name="name_ascending">Name ascending</string>
+    <string name="name_descending">Name descending</string>
 
 </resources>
