@@ -52,17 +52,18 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/holder_options"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/linearLayout"
-        android:padding="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:padding="12dp"
         app:srcCompat="@drawable/ic_more_vert_black"
-        tools:layout_editor_absoluteX="326dp"
-        tools:layout_editor_absoluteY="-37dp" />
+        android:focusable="true" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

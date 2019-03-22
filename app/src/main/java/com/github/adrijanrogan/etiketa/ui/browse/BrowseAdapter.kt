@@ -2,10 +2,13 @@ package com.github.adrijanrogan.etiketa.ui.browse
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +23,7 @@ class BrowseAdapter(private val context: Context, private val callback: BrowserC
         var fileIcon: ImageView = root.findViewById(R.id.holder_icon)
         var fileName: TextView = root.findViewById(R.id.holder_file_name)
         var subFiles: TextView = root.findViewById(R.id.holder_sub_files)
+        var options: ImageView = root.findViewById(R.id.holder_options)
     }
 
 
@@ -34,6 +38,7 @@ class BrowseAdapter(private val context: Context, private val callback: BrowserC
         val fileName = file.name
 
         holder.root.setOnClickListener { callback.onClickFile(getItem(position)) }
+        holder.options.setOnClickListener { showPopupMenu(it) }
 
         holder.fileName.text = fileName
         if (file.isDirectory) {
@@ -55,6 +60,24 @@ class BrowseAdapter(private val context: Context, private val callback: BrowserC
             holder.fileIcon.setImageResource(R.drawable.ic_file_black_24dp)
         }
 
+    }
+
+    private fun showPopupMenu(view: View) {
+        val popup = PopupMenu(context, view)
+        popup.menuInflater.inflate(R.menu.browser_file_menu, popup.menu)
+        popup.setOnMenuItemClickListener { onPopupMenuItemClicked(it) }
+        popup.show()
+    }
+
+
+    private fun onPopupMenuItemClicked(menuItem: MenuItem): Boolean {
+        when (menuItem.itemId) {
+            R.id.browser_menu_show_info ->
+                Toast.makeText(context, "TODO: Show info", Toast.LENGTH_LONG).show()
+            R.id.browser_menu_as_album ->
+                Toast.makeText(context, "TODO: Treat as album", Toast.LENGTH_LONG).show()
+        }
+        return true
     }
 
 
