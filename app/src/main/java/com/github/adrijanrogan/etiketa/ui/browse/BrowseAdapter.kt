@@ -38,7 +38,7 @@ class BrowseAdapter(private val context: Context, private val callback: BrowserC
         val fileName = file.name
 
         holder.root.setOnClickListener { callback.onClickFile(getItem(position)) }
-        holder.options.setOnClickListener { showPopupMenu(it) }
+        holder.options.setOnClickListener { showPopupMenu(it, getItem(position)) }
 
         holder.fileName.text = fileName
         if (file.isDirectory) {
@@ -62,18 +62,20 @@ class BrowseAdapter(private val context: Context, private val callback: BrowserC
 
     }
 
-    private fun showPopupMenu(view: View) {
+    private fun showPopupMenu(view: View, file: File) {
         val popup = PopupMenu(context, view)
         popup.menuInflater.inflate(R.menu.browser_file_menu, popup.menu)
-        popup.setOnMenuItemClickListener { onPopupMenuItemClicked(it) }
+        popup.setOnMenuItemClickListener { onPopupMenuItemClicked(it, file) }
         popup.show()
     }
 
 
-    private fun onPopupMenuItemClicked(menuItem: MenuItem): Boolean {
+    private fun onPopupMenuItemClicked(menuItem: MenuItem, file: File): Boolean {
         when (menuItem.itemId) {
-            R.id.browser_menu_show_info ->
+            R.id.browser_menu_show_info -> {
                 Toast.makeText(context, "TODO: Show info", Toast.LENGTH_LONG).show()
+                callback.showFileInfoDialog(file)
+            }
             R.id.browser_menu_as_album ->
                 Toast.makeText(context, "TODO: Treat as album", Toast.LENGTH_LONG).show()
         }

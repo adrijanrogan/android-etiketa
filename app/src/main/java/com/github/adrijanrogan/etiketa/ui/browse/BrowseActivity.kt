@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -122,6 +123,12 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
         } else {
             checkFile(file)
         }
+    }
+
+    override fun showFileInfoDialog(file: File) {
+        val dialog = FileInfoDialog(file)
+        dialog.setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Material_Light_Dialog_MinWidth)
+        dialog.show(supportFragmentManager, "FILE_INFO")
     }
 
     override fun onClickTreeFile(file: File) {
