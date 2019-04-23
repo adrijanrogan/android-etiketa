@@ -35,5 +35,9 @@
     <string name="group_folders">Združi mape</string>
     <string name="show_hidden">Pokaži skrite datoteke</string>
     <string name="sort_order">Razvrščanje</string>
+    <string name="absolute_path">Absolutna pot</string>
+    <string name="file_name">Ime datoteke</string>
+    <string name="size">Velikost</string>
+    <string name="last_modified">Nazadnje spremenjeno</string>
 
 </resources>

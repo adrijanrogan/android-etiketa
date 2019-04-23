@@ -22,12 +22,6 @@
                 android:visible="false"
                 android:title="" />
 
-            <item
-                android:id="@+id/browser_menu_sort_hidden"
-                android:checkable="true"
-                android:checked="false"
-                android:title="@string/show_hidden" />
-
             <group
                 android:checkableBehavior="single"
                 android:enabled="true">
@@ -43,6 +37,12 @@
         </menu>
 
     </item>
+
+    <item
+        android:id="@+id/browser_menu_sort_hidden"
+        android:checkable="true"
+        android:checked="false"
+        android:title="@string/show_hidden" />
 
     <item
         android:id="@+id/browser_menu_settings"

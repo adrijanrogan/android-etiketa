@@ -36,5 +36,9 @@
     <string name="show_hidden">Show hidden</string>
     <string name="name_ascending">Name ascending</string>
     <string name="name_descending">Name descending</string>
+    <string name="file_name">File name</string>
+    <string name="absolute_path">Absolute path</string>
+    <string name="last_modified">Last modified</string>
+    <string name="size">Size</string>
 
 </resources>

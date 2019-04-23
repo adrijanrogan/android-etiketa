@@ -7,18 +7,10 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/dialog_file_info_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="More information"
-        android:layout_margin="8dp"
-        style="@style/TextAppearance.MaterialComponents.Headline6"/>
-
-    <TextView
         android:id="@+id/dialog_file_info_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="File name"
+        android:text="@string/file_name"
         android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
@@ -34,6 +26,25 @@
         style="@style/TextAppearance.MaterialComponents.Body1"/>
 
     <TextView
+        android:id="@+id/dialog_file_info_path"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/absolute_path"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        style="@style/AppTheme.Text.Body3"/>
+
+    <TextView
+        android:id="@+id/dialog_file_info_path_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        style="@style/TextAppearance.MaterialComponents.Body1"/>
+
+    <TextView
         android:id="@+id/dialog_file_info_modified"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,7 +52,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         style="@style/AppTheme.Text.Body3"
-        android:text="Last modified" />
+        android:text="@string/last_modified" />
 
     <TextView
         android:id="@+id/dialog_file_info_modified_content"
@@ -60,7 +71,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         style="@style/AppTheme.Text.Body3"
-        android:text="Size" />
+        android:text="@string/size" />
 
     <TextView
         android:id="@+id/dialog_file_info_size_content"

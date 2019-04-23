@@ -40,6 +40,16 @@ class BrowseAdapter(private val context: Context, private val callback: BrowserC
         holder.root.setOnClickListener { callback.onClickFile(getItem(position)) }
         holder.options.setOnClickListener { showPopupMenu(it, getItem(position)) }
 
+        if (file.isHidden) {
+            holder.fileName.alpha = 0.7F
+            holder.subFiles.alpha = 0.7F
+            holder.fileIcon.imageAlpha = 127
+        } else {
+            holder.fileName.alpha = 1.0F
+            holder.subFiles.alpha = 1.0F
+            holder.fileIcon.imageAlpha = 255
+        }
+
         holder.fileName.text = fileName
         if (file.isDirectory) {
             holder.subFiles.visibility = View.VISIBLE
@@ -51,13 +61,18 @@ class BrowseAdapter(private val context: Context, private val callback: BrowserC
             holder.subFiles.visibility = View.GONE
         }
 
+        // TODO: Move this to something like an utility class
+
 
         if (file.isDirectory) {
-            holder.fileIcon.setImageResource(R.drawable.ic_folder_black_24dp)
+            holder.fileIcon.setImageResource(R.drawable.ic_outline_folder)
         } else if (fileName.endsWith("mp3") || fileName.endsWith("flac")) {
-            holder.fileIcon.setImageResource(R.drawable.ic_music_note_black_24dp)
+            holder.fileIcon.setImageResource(R.drawable.ic_outline_music_note)
+        } else if (fileName.endsWith("png") || fileName.endsWith("jpg") ||
+                fileName.endsWith("jpeg")) {
+            holder.fileIcon.setImageResource(R.drawable.ic_outline_photo)
         } else {
-            holder.fileIcon.setImageResource(R.drawable.ic_file_black_24dp)
+            holder.fileIcon.setImageResource(R.drawable.ic_outline_file)
         }
 
     }
@@ -73,7 +88,6 @@ class BrowseAdapter(private val context: Context, private val callback: BrowserC
     private fun onPopupMenuItemClicked(menuItem: MenuItem, file: File): Boolean {
         when (menuItem.itemId) {
             R.id.browser_menu_show_info -> {
-                Toast.makeText(context, "TODO: Show info", Toast.LENGTH_LONG).show()
                 callback.showFileInfoDialog(file)
             }
             R.id.browser_menu_as_album ->

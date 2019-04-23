@@ -1,31 +1,59 @@
 package com.github.adrijanrogan.etiketa.ui.browse
 
+import android.annotation.SuppressLint
+import android.app.Dialog
 import android.os.Bundle
 import android.text.format.DateUtils
-import android.view.ViewGroup
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.github.adrijanrogan.etiketa.R
+import com.github.adrijanrogan.etiketa.util.getFileSize
 import java.io.File
-import java.text.DateFormat
-import java.util.*
 
 
-class FileInfoDialog(val file: File) : DialogFragment() {
+class FileInfoDialog() : DialogFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.dialog_file_info, container, false)
-        val name: TextView = view.findViewById(R.id.dialog_file_info_name_content)
-        name.text = file.name
-        val modified: TextView = view.findViewById(R.id.dialog_file_info_modified_content)
-        val s = DateUtils.formatDateTime(activity!!, file.lastModified(), 0)
-        modified.text = s
-        val sizeContent: TextView = view.findViewById(R.id.dialog_file_info_size_content)
-        val size: Double = file.length() / 1024.0
-        sizeContent.text = String.format("%.2f kB", size)
-        return view
+    private var file: File? = null
+
+    constructor(file: File) : this() {
+        this.file = file
+    }
+
+    @SuppressLint("InflateParams") // null in docs
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        if (savedInstanceState != null) file = File(savedInstanceState.getString("FILE"))
+        return activity?.let {
+            val inflater = it.layoutInflater
+            val builder = AlertDialog.Builder(it)
+            val view = inflater.inflate(R.layout.dialog_file_info, null)
+            setInformation(view)
+            builder.setView(view)
+                    .setTitle("More information")
+                    .setPositiveButton("Close") { dialog, _ -> dialog.cancel() }
+                    .create()
+        } ?: throw IllegalStateException("Activity cannot be null.")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString("FILE", file?.absolutePath)
+    }
+
+    private fun setInformation(view: View) {
+        val nameView: TextView = view.findViewById(R.id.dialog_file_info_name_content)
+        nameView.text = file?.name ?: "<unknown>"
+        val pathView: TextView = view.findViewById(R.id.dialog_file_info_path_content)
+        pathView.text = file?.absolutePath ?: "<unknown>"
+
+        val modifiedView: TextView = view.findViewById(R.id.dialog_file_info_modified_content)
+        file?.lastModified()?.let {
+            modifiedView.text = DateUtils.formatDateTime(activity!!, it, 0)
+        }
+
+        val sizeView: TextView = view.findViewById(R.id.dialog_file_info_size_content)
+
+        val (file, unit) = getFileSize(file?.length() ?: 0)
+        sizeView.text = String.format("%.2f %s", file, unit)
     }
 }
