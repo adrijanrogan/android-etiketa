@@ -19,8 +19,8 @@
             android:id="@+id/browser_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="@string/app_name"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            app:title="@string/app_name"
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
         </androidx.appcompat.widget.Toolbar>
@@ -29,6 +29,8 @@
             android:id="@+id/browser_bar_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
             app:layout_scrollFlags="noScroll"
             android:paddingStart="12dp"
             tools:ignore="RtlSymmetry">

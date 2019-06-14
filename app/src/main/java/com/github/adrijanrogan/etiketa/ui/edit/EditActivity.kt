@@ -11,70 +11,73 @@ import com.github.adrijanrogan.etiketa.jni.FlacWriter
 import com.github.adrijanrogan.etiketa.jni.Metadata
 import com.github.adrijanrogan.etiketa.jni.Mp3Writer
 import com.github.adrijanrogan.etiketa.jni.Writer
+import kotlinx.android.synthetic.main.activity_edit.*
 import java.io.File
 
 class EditActivity : AppCompatActivity() {
 
     private lateinit var viewModel: EditViewModel
 
-    private lateinit var imageView: ImageView
-    private lateinit var titleEdit: EditText
-    private lateinit var artistEdit: EditText
-    private lateinit var albumEdit: EditText
-    private lateinit var yearEdit: EditText
-    private lateinit var buttonSave: Button
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
-        imageView = findViewById(R.id.image)
-        titleEdit = findViewById(R.id.text_title)
-        artistEdit = findViewById(R.id.text_artist)
-        albumEdit = findViewById(R.id.text_album)
-        yearEdit = findViewById(R.id.text_year)
-        buttonSave = findViewById(R.id.button_save)
 
         val metadata = intent.getBundleExtra("METADATA")
         val file = intent.getSerializableExtra("FILE") as File
-
         viewModel = ViewModelProviders.of(this).get(EditViewModel::class.java)
         viewModel.setup(file, metadata)
 
-        if (viewModel.getImagePath().isNotBlank()) {
-            imageView.visibility = View.VISIBLE
-            val albumArt = BitmapFactory.decodeFile(viewModel.getImagePath())
-            imageView.setImageBitmap(albumArt)
-        } else if (file.name.endsWith(".mp3") && metadata.getInt("ID3") == 1) {
-            val textImage = findViewById<TextView>(R.id.text_image)
-            textImage.setText(R.string.id3_older_format)
-            imageView.visibility = View.GONE
-            textImage.visibility = View.VISIBLE
-        } else {
-            val textImage = findViewById<TextView>(R.id.text_image)
-            textImage.setText(R.string.picture_not_found)
-            imageView.visibility = View.GONE
-            textImage.visibility = View.VISIBLE
-        }
+        edit_toolbar.setNavigationOnClickListener { onToolbarNavigationClick() }
+        button_save.setOnClickListener { onSaveButtonClick() }
 
-
-        titleEdit.setText(viewModel.getOriginalTitle())
-        artistEdit.setText(viewModel.getOriginalArtist())
-        albumEdit.setText(viewModel.getOriginalAlbum())
-        yearEdit.setText(viewModel.getOriginalYear())
-
-        buttonSave.setOnClickListener { compareMetadata() }
+        setImage(file, metadata)
+        text_title.setText(viewModel.getOriginalTitle())
+        text_artist.setText(viewModel.getOriginalArtist())
+        text_album.setText(viewModel.getOriginalAlbum())
+        text_year.setText(viewModel.getOriginalYear())
     }
 
+    private fun setImage(file: File, metadata: Bundle) {
+        if (viewModel.getImagePath().isNotBlank()) {
+            image.visibility = View.VISIBLE
+            text_image.visibility = View.GONE
+            val albumArt = BitmapFactory.decodeFile(viewModel.getImagePath())
+            image.setImageBitmap(albumArt)
+        } else if (file.name.endsWith(".mp3") && metadata.getInt("ID3") == 1) {
+            text_image.setText(R.string.id3_older_format)
+            image.visibility = View.GONE
+            text_image.visibility = View.VISIBLE
+        } else {
+            text_image.setText(R.string.picture_not_found)
+            image.visibility = View.GONE
+            text_image.visibility = View.VISIBLE
+        }
+    }
 
-    private fun compareMetadata() {
-        val title = titleEdit.text.toString()
-        val artist = artistEdit.text.toString()
-        val album = albumEdit.text.toString()
-        val year = yearEdit.text.toString().toIntOrNull() ?: 0
+    private fun onToolbarNavigationClick() {
+        if (hasMetadataChanged()) {
+            // TODO: Show dialog to warn user about saving
+            closeActivity()
+        } else {
+            closeActivity()
+        }
+    }
+
+    private fun onSaveButtonClick() {
+        if (hasMetadataChanged()) writeChanges() else {
+            postResult(2)
+            closeActivity()
+        }
+    }
+
+    private fun hasMetadataChanged(): Boolean {
+        val title = text_title.text.toString()
+        val artist = text_artist.text.toString()
+        val album = text_album.text.toString()
+        val year = text_year.text.toString().toIntOrNull() ?: 0
         val metadata = Metadata(title, artist, album, year, null, null)
         viewModel.setNewMetadata(metadata)
-        if (viewModel.metadataChanged()) writeChanges()
-        else postResult(2)
+        return viewModel.metadataChanged()
     }
 
     private fun writeChanges() {
@@ -93,7 +96,10 @@ class EditActivity : AppCompatActivity() {
             Writer.METADATA_WRITE_FAILURE -> postResult(0)
             Writer.METADATA_WRITE_SUCCESS -> postResult(1)
         }
+        closeActivity()
+    }
 
+    private fun closeActivity() {
         finish()
         overridePendingTransition(0, android.R.anim.fade_out)
     }

@@ -24,7 +24,7 @@ class FileInfoDialog() : DialogFragment() {
     @SuppressLint("InflateParams") // null in docs
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         if (savedInstanceState != null) file = File(savedInstanceState.getString("FILE"))
-        return activity?.let {
+        return activity!!.let {
             val inflater = it.layoutInflater
             val builder = AlertDialog.Builder(it)
             val view = inflater.inflate(R.layout.dialog_file_info, null)
@@ -33,7 +33,7 @@ class FileInfoDialog() : DialogFragment() {
                     .setTitle("More information")
                     .setPositiveButton("Close") { dialog, _ -> dialog.cancel() }
                     .create()
-        } ?: throw IllegalStateException("Activity cannot be null.")
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

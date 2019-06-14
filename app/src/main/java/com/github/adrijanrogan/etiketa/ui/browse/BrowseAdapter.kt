@@ -63,7 +63,6 @@ class BrowseAdapter(private val context: Context, private val callback: BrowserC
 
         // TODO: Move this to something like an utility class
 
-
         if (file.isDirectory) {
             holder.fileIcon.setImageResource(R.drawable.ic_outline_folder)
         } else if (fileName.endsWith("mp3") || fileName.endsWith("flac")) {

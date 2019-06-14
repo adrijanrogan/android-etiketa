@@ -32,8 +32,6 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
         const val EXTENSION_FLAC = "flac"
     }
 
-    private var showHidden: Boolean = false
-
     private lateinit  var viewModel: BrowseViewModel
     private lateinit var rootView: ViewGroup
     private lateinit var toolbar: Toolbar
@@ -87,7 +85,6 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
     private fun onMenuItemClick(menuItem: MenuItem): Boolean {
         val id = menuItem.itemId
         val editor = getSharedPreferences("browse_settings", Context.MODE_PRIVATE).edit()
-        // TODO: How to map all choices as efficient as possible?
         when (id) {
             R.id.browser_menu_folders -> {
                 menuItem.isChecked = !menuItem.isChecked
@@ -190,7 +187,7 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
         }
 
         val metadata = reader.getMetadata()
-        // TODO: Save images to disk and write entries to the Room database
+        // TODO: Save image async or use the bytes directly
         // (sometimes the picture takes a long time to save)
         metadata.writeImageToDisk(this)
         when (check) {

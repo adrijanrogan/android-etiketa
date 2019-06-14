@@ -5,6 +5,8 @@ import java.util.*
 
 class FileComparator(private val comparisonType: Int) : Comparator<File> {
 
+    // TODO: Use bitwise operations to set options (simpler implementation of functions)
+
     companion object {
         // First folder names a-z, then file names a-z
         const val SORT_FOLDER_NAME = 0
