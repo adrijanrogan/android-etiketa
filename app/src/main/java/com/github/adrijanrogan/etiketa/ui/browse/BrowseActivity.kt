@@ -124,7 +124,7 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
 
     override fun showFileInfoDialog(file: File) {
         val dialog = FileInfoDialog(file)
-        dialog.setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Material_Light_Dialog_MinWidth)
+        dialog.setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Material_Light_Dialog_MinWidth)
         dialog.show(supportFragmentManager, "file_info_dialog")
     }
 

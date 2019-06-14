@@ -40,5 +40,9 @@
     <string name="absolute_path">Absolute path</string>
     <string name="last_modified">Last modified</string>
     <string name="size">Size</string>
+    <string name="unsaved_changes_details">The metadata changes to this file have not been saved. Do you want to save them or discard them?</string>
+    <string name="unsaved_changes">Unsaved changes</string>
+    <string name="cancel">Cancel</string>
+    <string name="discard">Discard</string>
 
 </resources>

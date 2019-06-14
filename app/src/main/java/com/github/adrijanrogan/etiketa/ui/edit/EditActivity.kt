@@ -5,16 +5,18 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
 import com.github.adrijanrogan.etiketa.R
 import com.github.adrijanrogan.etiketa.jni.FlacWriter
 import com.github.adrijanrogan.etiketa.jni.Metadata
 import com.github.adrijanrogan.etiketa.jni.Mp3Writer
 import com.github.adrijanrogan.etiketa.jni.Writer
+import com.github.adrijanrogan.etiketa.ui.browse.FileInfoDialog
 import kotlinx.android.synthetic.main.activity_edit.*
 import java.io.File
 
-class EditActivity : AppCompatActivity() {
+class EditActivity : AppCompatActivity(), EditSaveDialog.EditSaveDialogListener {
 
     private lateinit var viewModel: EditViewModel
 
@@ -56,8 +58,9 @@ class EditActivity : AppCompatActivity() {
 
     private fun onToolbarNavigationClick() {
         if (hasMetadataChanged()) {
-            // TODO: Show dialog to warn user about saving
-            closeActivity()
+            val dialog = EditSaveDialog(this)
+            dialog.setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Material_Light_Dialog_MinWidth)
+            dialog.show(supportFragmentManager, "file_info_dialog")
         } else {
             closeActivity()
         }
@@ -68,6 +71,14 @@ class EditActivity : AppCompatActivity() {
             postResult(2)
             closeActivity()
         }
+    }
+
+    override fun onDialogSaveButtonClick() {
+        onSaveButtonClick()
+    }
+
+    override fun onDialogDiscardButtonClick() {
+        closeActivity()
     }
 
     private fun hasMetadataChanged(): Boolean {

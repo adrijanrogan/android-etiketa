@@ -39,5 +39,9 @@
     <string name="file_name">Ime datoteke</string>
     <string name="size">Velikost</string>
     <string name="last_modified">Nazadnje spremenjeno</string>
+    <string name="unsaved_changes">Neshranjene spremembe</string>
+    <string name="unsaved_changes_details">Spremenjeni metapodatki niso shranjeni. Jih želite shraniti ali zavreči?</string>
+    <string name="cancel">Prekliči</string>
+    <string name="discard">Zavrzi</string>
 
 </resources>
