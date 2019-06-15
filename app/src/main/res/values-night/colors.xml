@@ -8,14 +8,14 @@
     <color name="colorAccentDark">#FF206A</color>
     <color name="color_on_secondary">#FFFFFF</color>
 
-    <color name="color_background">#FFFFFF</color>
-    <color name="colorSurface">#FFFFFF</color>
-    <color name="colorOnSurface">#000000</color>
+    <color name="color_background">#000000</color>
+    <color name="colorSurface">#000000</color>
+    <color name="colorOnSurface">#FFFFFF</color>
 
-    <color name="color_background_light">#F5F5F5</color>
+    <color name="color_background_light">#2A2A2A</color>
 
-    <color name="primaryTextLightBackground">#de000000</color>
-    <color name="secondaryTextLightBackground">#99000000</color>
+    <color name="primaryTextLightBackground">#DEFFFFFF</color>
+    <color name="secondaryTextLightBackground">#99FFFFFF</color>
 
     <color name="dividerColor">#1e000000</color>
 
