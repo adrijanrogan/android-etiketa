@@ -64,16 +64,15 @@ class BrowseAdapter(private val context: Context, private val callback: BrowserC
         // TODO: Move this to something like an utility class
 
         if (file.isDirectory) {
-            holder.fileIcon.setImageResource(R.drawable.ic_outline_folder)
+            holder.fileIcon.setImageResource(R.drawable.outline_folder_surface)
         } else if (fileName.endsWith("mp3") || fileName.endsWith("flac")) {
-            holder.fileIcon.setImageResource(R.drawable.ic_outline_music_note)
+            holder.fileIcon.setImageResource(R.drawable.outline_music_note_surface)
         } else if (fileName.endsWith("png") || fileName.endsWith("jpg") ||
                 fileName.endsWith("jpeg")) {
-            holder.fileIcon.setImageResource(R.drawable.ic_outline_photo)
+            holder.fileIcon.setImageResource(R.drawable.outline_photo_surface)
         } else {
-            holder.fileIcon.setImageResource(R.drawable.ic_outline_file)
+            holder.fileIcon.setImageResource(R.drawable.outline_file_surface)
         }
-
     }
 
     private fun showPopupMenu(view: View, file: File) {

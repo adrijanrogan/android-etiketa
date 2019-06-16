@@ -44,5 +44,9 @@
     <string name="unsaved_changes">Unsaved changes</string>
     <string name="cancel">Cancel</string>
     <string name="discard">Discard</string>
+    <string name="display_theme_light">Light</string>
+    <string name="display_theme_dark">Dark</string>
+    <string name="display_theme_battery_saver">Set by Battery Saver</string>
+    <string name="display_theme_system">Follow System</string>
 
 </resources>

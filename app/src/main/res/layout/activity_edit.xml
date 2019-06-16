@@ -5,7 +5,7 @@
     android:id="@+id/edit_root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_background_light">
+    android:background="@color/colorSurface">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/edit_app_bar"
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/tag_editor"
-            app:navigationIcon="@drawable/ic_arrow_back_white"
+            app:navigationIcon="@drawable/arrow_back_primary"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
