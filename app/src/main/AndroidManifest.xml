@@ -15,8 +15,7 @@
         android:name=".ui.EtiketaApp"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-        <activity android:name="com.github.adrijanrogan.etiketa.ui.start.StartActivity"
-            android:noHistory="true" >
+        <activity android:name="com.github.adrijanrogan.etiketa.ui.browse.BrowseActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +23,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.github.adrijanrogan.etiketa.ui.browse.BrowseActivity" />
         <activity android:name="com.github.adrijanrogan.etiketa.ui.edit.EditActivity" />
 
         <activity android:name=".ui.settings.SettingsActivity" />

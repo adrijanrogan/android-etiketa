@@ -1,20 +1,20 @@
 package com.github.adrijanrogan.etiketa.ui.browse
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.Fade
 import com.github.adrijanrogan.etiketa.R
 import com.github.adrijanrogan.etiketa.jni.FlacReader
@@ -24,6 +24,7 @@ import com.github.adrijanrogan.etiketa.jni.Reader
 import com.github.adrijanrogan.etiketa.ui.edit.EditActivity
 import com.github.adrijanrogan.etiketa.ui.settings.SettingsActivity
 import com.github.adrijanrogan.etiketa.util.FileComparator
+import kotlinx.android.synthetic.main.activity_browser.*
 import java.io.File
 
 class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback {
@@ -31,39 +32,71 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
     companion object {
         const val EXTENSION_MP3 = "mp3"
         const val EXTENSION_FLAC = "flac"
+        private const val PERMISSION_REQUEST = 9858
     }
 
     private lateinit  var viewModel: BrowseViewModel
-    private lateinit var rootView: ViewGroup
-    private lateinit var toolbar: Toolbar
-
-    private lateinit var barRecyclerView: RecyclerView
     private lateinit var barRecyclerAdapter: BrowserBarAdapter
-
-    private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerAdapter: BrowseAdapter
-    private lateinit var noFiles: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_browser)
-        rootView = findViewById(R.id.browser_root_view)
-        toolbar = findViewById(R.id.browser_toolbar)
-        toolbar.inflateMenu(R.menu.browser_toolbar_menu)
-        toolbar.setOnMenuItemClickListener { onMenuItemClick(it) }
+        val permissionCheck = ContextCompat.checkSelfPermission(
+                this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            proceed()
+        } else {
+            permissionFlow()
+        }
+    }
+
+    private fun permissionFlow() {
+        androidx.transition.TransitionManager.beginDelayedTransition(browser_root_view, Fade())
+        text_no_files.visibility = View.INVISIBLE
+        browser_recycler.visibility = View.INVISIBLE
+        browser_bar_recycler.visibility = View.INVISIBLE
+        permission_request.visibility = View.VISIBLE
+        permission_button.setOnClickListener { requestPermission() }
+    }
+
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), PERMISSION_REQUEST)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
+                                            grantResults: IntArray) {
+        if (requestCode == PERMISSION_REQUEST) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                proceed()
+            } else {
+                Toast.makeText(this,
+                        "Prosimo sprejmite zahtevo za dostop do pomnilnika",
+                        Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun proceed() {
+        androidx.transition.TransitionManager.beginDelayedTransition(browser_root_view, Fade())
+        permission_request.visibility = View.GONE
+        text_no_files.visibility = View.INVISIBLE
+        browser_recycler.visibility = View.VISIBLE
+        browser_bar_recycler.visibility = View.VISIBLE
 
         viewModel = ViewModelProviders.of(this).get(BrowseViewModel::class.java)
 
-        barRecyclerView = findViewById(R.id.browser_bar_recycler)
-        barRecyclerView.also {
+        browser_toolbar.inflateMenu(R.menu.browser_toolbar_menu)
+        browser_toolbar.setOnMenuItemClickListener { onMenuItemClick(it) }
+
+        browser_bar_recycler.also {
             it.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             barRecyclerAdapter = BrowserBarAdapter(this, this)
             it.adapter = barRecyclerAdapter
         }
 
-        recyclerView = findViewById(R.id.browser_recycler)
-        noFiles = findViewById(R.id.text_no_files)
-        recyclerView.also {
+        browser_recycler.also {
             it.layoutManager = LinearLayoutManager(this)
             recyclerAdapter = BrowseAdapter(this, this)
             it.adapter = recyclerAdapter
@@ -71,6 +104,7 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
 
         observeLiveData()
     }
+
 
     private fun observeLiveData() {
         val sp = getSharedPreferences("browse_settings", Context.MODE_PRIVATE)
@@ -138,13 +172,13 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
 
     private fun updateUI(files: List<File>) {
         if (files.isEmpty()) {
-            androidx.transition.TransitionManager.beginDelayedTransition(rootView, Fade())
-            recyclerView.visibility = View.GONE
-            noFiles.visibility = View.VISIBLE
+            androidx.transition.TransitionManager.beginDelayedTransition(browser_root_view, Fade())
+            browser_recycler.visibility = View.GONE
+            text_no_files.visibility = View.VISIBLE
         } else {
-            androidx.transition.TransitionManager.beginDelayedTransition(rootView, Fade())
-            noFiles.visibility = View.GONE
-            recyclerView.visibility = View.VISIBLE
+            androidx.transition.TransitionManager.beginDelayedTransition(browser_root_view, Fade())
+            text_no_files.visibility = View.GONE
+            browser_recycler.visibility = View.VISIBLE
             recyclerAdapter.submitList(files)
         }
     }
