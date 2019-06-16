@@ -5,11 +5,11 @@
 
     <PreferenceCategory
         android:key="settings_display"
-        android:title="Display">
+        android:title="@string/display">
 
         <ListPreference
             android:key="settings_display_theme"
-            android:title="Choose theme"
+            android:title="@string/choose_theme"
             app:useSimpleSummaryProvider="true"
             android:defaultValue="1"
             android:entries="@array/settings_display_theme_entries"
@@ -18,7 +18,8 @@
 
         <CheckBoxPreference
             android:key="settings_display_true_black"
-            android:title="Use true black color"
+            android:title="@string/true_black_color"
+            android:summary="TODO"
             android:defaultValue="false" />
 
     </PreferenceCategory>

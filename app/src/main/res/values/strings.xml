@@ -48,5 +48,8 @@
     <string name="display_theme_dark">Dark</string>
     <string name="display_theme_battery_saver">Set by Battery Saver</string>
     <string name="display_theme_system">Follow System</string>
+    <string name="choose_theme">Choose theme</string>
+    <string name="true_black_color">Black color instead of dark grey</string>
+    <string name="display">Display</string>
 
 </resources>

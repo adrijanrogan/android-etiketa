@@ -45,5 +45,8 @@
     <string name="display_theme_light">Hell</string>
     <string name="display_theme_battery_saver">Abhängig vom Batteriesparmodus</string>
     <string name="display_theme_system">Systemeinstellungen folgen</string>
+    <string name="choose_theme">Design auswählen</string>
+    <string name="true_black_color">Schwarz anstelle von Dunkelgrau</string>
+    <string name="display">Display</string>
 
 </resources>
