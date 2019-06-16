@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_folder_black_24dp" />
+        app:srcCompat="@drawable/outline_file_surface" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -62,7 +62,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:padding="12dp"
-        app:srcCompat="@drawable/ic_more_vert_black"
+        app:srcCompat="@drawable/more_vertical_primary"
         android:focusable="true" />
 
 

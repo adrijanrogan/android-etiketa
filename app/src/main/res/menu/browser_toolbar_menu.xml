@@ -45,6 +45,11 @@
         android:title="@string/show_hidden" />
 
     <item
+        android:id="@+id/browser_menu_as_album"
+        app:showAsAction="never"
+        android:title="Treat as album folder"/>
+
+    <item
         android:id="@+id/browser_menu_settings"
         app:showAsAction="never"
         android:title="@string/settings" />
