@@ -43,5 +43,9 @@
     <string name="unsaved_changes_details">Spremenjeni metapodatki niso shranjeni. Jih želite shraniti ali zavreči?</string>
     <string name="cancel">Prekliči</string>
     <string name="discard">Zavrzi</string>
+    <string name="display_theme_light">Svetlo</string>
+    <string name="display_theme_battery_saver">Odvisno od varčevanja z energijo</string>
+    <string name="display_theme_dark">Temno</string>
+    <string name="display_theme_system">Upoštevaj sistemsko nastavitev</string>
 
 </resources>

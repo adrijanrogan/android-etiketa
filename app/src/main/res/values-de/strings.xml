@@ -41,5 +41,9 @@
     <string name="cancel">Abbrechen</string>
     <string name="unsaved_changes">Ungespeicherte Änderungen</string>
     <string name="unsaved_changes_details">Die Metadatenänderungen an dieser Datei wurden nicht gespeichert. Möchten Sie sie speichern oder wegwerfen?</string>
+    <string name="display_theme_dark">Dunkel</string>
+    <string name="display_theme_light">Hell</string>
+    <string name="display_theme_battery_saver">Abhängig vom Batteriesparmodus</string>
+    <string name="display_theme_system">Systemeinstellungen folgen</string>
 
 </resources>

@@ -73,7 +73,6 @@ class BrowseAdapter(private val context: Context, private val callback: BrowserC
         } else {
             holder.fileIcon.setImageResource(R.drawable.outline_file_surface)
         }
-
     }
 
     private fun showPopupMenu(view: View, file: File) {

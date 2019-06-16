@@ -22,6 +22,7 @@ import com.github.adrijanrogan.etiketa.jni.Metadata
 import com.github.adrijanrogan.etiketa.jni.Mp3Reader
 import com.github.adrijanrogan.etiketa.jni.Reader
 import com.github.adrijanrogan.etiketa.ui.edit.EditActivity
+import com.github.adrijanrogan.etiketa.ui.settings.SettingsActivity
 import com.github.adrijanrogan.etiketa.util.FileComparator
 import java.io.File
 
@@ -106,6 +107,9 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
             R.id.browser_menu_sort_descending -> {
                 menuItem.isChecked = true
                 editor.putInt("BROWSE_SORT_MODE", FileComparator.SORT_FOLDER_NAME_REVERSED)
+            }
+            R.id.browser_menu_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
             }
         }
         editor.apply()
