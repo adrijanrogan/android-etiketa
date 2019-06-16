@@ -6,7 +6,7 @@ Etiketa je Android aplikacija, ki omogoča spreminjanje metapodatkov MP3 in FLAC
 ## Načrtovane spremembe in izboljšave
 
 * Uporaba storage access framework (uporaba File v prihodnje ne bo več možna)
-* Dark Theme podpora
+* <strike>Dark Theme podpora</strike> <i>(Done)</i>
 * Možnost spremembe slike (artwork)
 * 'Single Activity' design
 * Deljenje informacij preko ViewModel (npr. izbrana datoteka)
