@@ -1,12 +1,14 @@
 # etiketa
 
-Etiketa je Android aplikacija, ki omogoča spreminjanje metapodatkov MP3 in FLAC glasbenih datotek. Dostop do metapodatkov poteka preko knjižnice TagLib.
-
+Etiketa je Android aplikacija, ki omogoča spreminjanje metapodatkov MP3 in FLAC glasbenih datotek.
+* Podpora za ID3v1, ID3v2 (MP3) in VorbisComment (FLAC)
+* Spreminjanje naslova, albuma, izvajalca in leta izdaje
+* Brskanje po celotnem uporabniškem datotečnem sistemu
+* Dark/Night tema
 
 ## Načrtovane spremembe in izboljšave
 
 * Uporaba storage access framework (uporaba File v prihodnje ne bo več možna)
-* <strike>Dark Theme podpora</strike> <i>(Done)</i>
 * Možnost spremembe slike (artwork)
 * 'Single Activity' design
 * Deljenje informacij preko ViewModel (npr. izbrana datoteka)
@@ -23,4 +25,6 @@ Etiketa je Android aplikacija, ki omogoča spreminjanje metapodatkov MP3 in FLAC
 
 ## O projektu
 
-Projekt je nastal v okviru projektne naloge pri informatiki na splošni maturi z naslovom "Uporaba JNI v razvoju Android aplikacije".
+Projekt je nastal v okviru projektne naloge pri informatiki na splošni maturi z naslovom "Uporaba JNI v razvoju Android aplikacije". Končna verzija je bila napisana v Javi, projekt pa se je od takrat prepisal v Kotlinu in se še vedno razvija.
+
+Dostop do metapodatkov poteka preko knjižnice [TagLib](https://taglib.org/), okoli katere je napisan JNI wrapper ([1](https://github.com/adrijanrogan/etiketa/tree/master/app/src/main/java/com/github/adrijanrogan/etiketa/jni) in [2](https://github.com/adrijanrogan/etiketa/tree/master/app/src/main/cpp/taglib/jni)).
