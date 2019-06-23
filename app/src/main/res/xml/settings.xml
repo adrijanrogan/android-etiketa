@@ -24,4 +24,36 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="settings_sorting"
+        android:title="Sorting">
+
+        <ListPreference
+            android:key="settings_sorting_sort_by"
+            android:title="Sort by"
+            app:useSimpleSummaryProvider="true"
+            android:defaultValue="1"
+            android:entries="@array/settings_sorting_sort_by_entries"
+            android:entryValues="@array/settings_sorting_sort_by_values" />
+
+        <ListPreference
+            android:key="settings_sorting_order"
+            android:title="Sort order"
+            app:useSimpleSummaryProvider="true"
+            android:defaultValue="1"
+            android:entries="@array/settings_sorting_order_entries"
+            android:entryValues="@array/settings_sorting_order_values" />
+
+        <CheckBoxPreference
+            android:key="settings_sorting_group"
+            android:title="Group files and folders"
+            android:defaultValue="true" />
+
+        <CheckBoxPreference
+            android:key="settings_sorting_show_hidden"
+            android:title="Show hidden files"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
