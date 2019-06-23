@@ -3,54 +3,57 @@ package com.github.adrijanrogan.etiketa.util
 import java.io.File
 import java.util.*
 
-class FileComparator(private val comparisonType: Int) : Comparator<File> {
+class FileComparator(private val sortMode: Int) : Comparator<File> {
 
-    // TODO: Use bitwise operations to set options (simpler implementation of functions)
+    override fun compare(o1: File, o2: File): Int {
+        val type = sortMode or SORT_MODE_FILTER
+        val asc = sortMode and SORT_MODE_REVERSED == 0
+        val ascending = if (asc) 1 else -1
+        val group = sortMode and SORT_MODE_DO_NOT_GROUP == 0
+
+        val result = when (type) {
+            SORT_MODE_FILENAME -> compareByName(o1, o2, group)
+            else -> compareByName(o1, o2, group)
+        }
+
+        return ascending * result
+    }
+
+    private fun compareByName(first: File, second: File, group: Boolean): Int {
+        return if (group) {
+            when {
+                first.isDirectory == second.isDirectory -> compareByName(first, second, false)
+                first.isDirectory -> -1
+                else -> 1
+            }
+        } else {
+            first.name.toLowerCase().compareTo(second.name.toLowerCase())
+        }
+    }
+
 
     companion object {
-        // First folder names a-z, then file names a-z
-        const val SORT_FOLDER_NAME = 0
-        // First folder names z-a, then file names z-a
-        const val SORT_FOLDER_NAME_REVERSED = 1
-        // First file names a-z, then folder names a-z
-        const val SORT_FOLDER_REVERSED_NAME = 2
-        // First file names z-a, then folder names z-a
-        const val SORT_FOLDER_REVERSED_NAME_REVERSED = 2
 
-        // Folders and files mixed a-z
-        const val SORT_NAME = 10
-        // Folders and files mixed z-a
-        const val SORT_NAME_REVERSED = 11
+        // "First" bit:
+        // 0: sort by filename
+        // 1: sort by last modified
+        const val SORT_MODE_FILENAME = 0x000
+        const val SORT_MODE_LAST_MODIFIED = 0x100
 
-        // First group by extension, then sort by name a-z in groups
-        const val SORT_EXTENSION_NAME = 20
-    }
+        const val SORT_MODE_FILTER = 0x100
 
-    /* Datoteke razvrsti tako, da so na vrhu mape, spodaj pa datoteke, obe skupini
-       pa sta sortirani še padajoce po imenu. */
-    override fun compare(o1: File, o2: File): Int {
-        return when (comparisonType) {
-            SORT_FOLDER_NAME -> compareByFolderAndName(o1, o2)
-            SORT_FOLDER_NAME_REVERSED -> compareByFolderAndNameReversed(o1, o2)
-            else -> compareByFolderAndName(o1, o2)
-        }
-    }
+        // "Second" bit:
+        // 0: ascending (normal)
+        // 1: descending (reversed)
+        const val SORT_MODE_NORMAL = 0x000
+        const val SORT_MODE_REVERSED = 0x010
 
-    private fun compareByFolderAndName(o1: File, o2: File): Int {
-        return when {
-            o1.isDirectory == o2.isDirectory ->
-                o1.name.toLowerCase().compareTo(o2.name.toLowerCase())
-            o1.isDirectory -> -1
-            else -> 1
-        }
-    }
+        // "Third" bit:
+        // 0: group folders and files
+        // 1: mixed folders and files
+        const val SORT_MODE_GROUP = 0x000
+        const val SORT_MODE_DO_NOT_GROUP = 0x001
 
-    private fun compareByFolderAndNameReversed(o1: File, o2: File): Int {
-        return when {
-            o1.isDirectory == o2.isDirectory ->
-                o1.name.toLowerCase().compareTo(o2.name.toLowerCase()) * -1
-            o1.isDirectory -> -1
-            else -> 1
-        }
+        // TODO: Group by extension option
     }
 }

@@ -3,6 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/browser_menu_sort_by"
+        app:showAsAction="never"
+        android:title="Sort by" >
+
+        <menu>
+
+            <group
+                android:checkableBehavior="single"
+                android:enabled="true">
+                <item
+                    android:id="@+id/browser_menu_sort_by_name"
+                    android:title="Name" />
+
+                <item
+                    android:id="@+id/browser_menu_sort_by_last_modified"
+                    android:title="Last modified" />
+            </group>
+
+        </menu>
+
+    </item>
+
+    <item
         android:id="@+id/browser_menu_sort_order"
         app:showAsAction="never"
         android:title="@string/sort_order" >
@@ -14,13 +37,6 @@
                 android:checkable="true"
                 android:checked="true"
                 android:title="@string/group_folders" />
-
-            <item
-                android:id="@+id/browser_menu_sort_extension"
-                android:checkable="true"
-                android:checked="false"
-                android:visible="false"
-                android:title="" />
 
             <group
                 android:checkableBehavior="single"
@@ -43,11 +59,6 @@
         android:checkable="true"
         android:checked="false"
         android:title="@string/show_hidden" />
-
-    <item
-        android:id="@+id/browser_menu_as_album"
-        app:showAsAction="never"
-        android:title="Treat as album folder"/>
 
     <item
         android:id="@+id/browser_menu_settings"

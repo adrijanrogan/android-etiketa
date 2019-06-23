@@ -15,7 +15,7 @@ class BrowseViewModel : ViewModel() {
         return repository.getTree()
     }
 
-    fun getFiles(showHidden: Boolean = false, sortOrder: Int = FileComparator.SORT_FOLDER_NAME):
+    fun getFiles(showHidden: Boolean = false, sortOrder: Int = FileComparator.SORT_MODE_FILENAME):
             LiveData<List<File>> {
         val filesLiveData = repository.getFiles()
         return Transformations.map(filesLiveData) { files ->
@@ -32,11 +32,7 @@ class BrowseViewModel : ViewModel() {
             newList.addAll(files)
         }
 
-        when (sortOrder) {
-            FileComparator.SORT_FOLDER_NAME -> newList.sortWith(FileComparator(sortOrder))
-            FileComparator.SORT_FOLDER_NAME_REVERSED -> newList.sortWith(FileComparator(sortOrder))
-            else -> newList.sortWith(FileComparator(FileComparator.SORT_FOLDER_NAME))
-        }
+        newList.sortWith(FileComparator(sortOrder))
         return newList
     }
 
