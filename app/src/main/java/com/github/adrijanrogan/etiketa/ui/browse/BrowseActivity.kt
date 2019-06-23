@@ -1,10 +1,10 @@
 package com.github.adrijanrogan.etiketa.ui.browse
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.Fade
 import com.github.adrijanrogan.etiketa.R
@@ -23,6 +24,7 @@ import com.github.adrijanrogan.etiketa.jni.Mp3Reader
 import com.github.adrijanrogan.etiketa.jni.Reader
 import com.github.adrijanrogan.etiketa.ui.edit.EditActivity
 import com.github.adrijanrogan.etiketa.ui.settings.SettingsActivity
+import com.github.adrijanrogan.etiketa.ui.settings.SettingsFragment
 import com.github.adrijanrogan.etiketa.util.FileComparator
 import kotlinx.android.synthetic.main.activity_browser.*
 import java.io.File
@@ -33,11 +35,6 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
         const val EXTENSION_MP3 = "mp3"
         const val EXTENSION_FLAC = "flac"
         private const val PERMISSION_REQUEST = 9858
-
-        const val SORT_BY = "sort_by"
-        const val SORT_ORDER = "sort_order"
-        const val SORT_GROUP_FOLDERS = "sort_group_folders"
-        const val SORT_SHOW_HIDDEN = "sort_show_hidden"
     }
 
     private lateinit  var viewModel: BrowseViewModel
@@ -54,6 +51,15 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
         } else {
             permissionFlow()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (SettingsFragment.invalidateSort) {
+            observeLiveData()
+            syncMenu(browser_toolbar.menu)
+        }
+        SettingsFragment.invalidateSort = false
     }
 
     private fun permissionFlow() {
@@ -93,6 +99,7 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
         viewModel = ViewModelProviders.of(this).get(BrowseViewModel::class.java)
 
         browser_toolbar.inflateMenu(R.menu.browser_toolbar_menu)
+        syncMenu(browser_toolbar.menu)
         browser_toolbar.setOnMenuItemClickListener { onMenuItemClick(it) }
 
         browser_bar_recycler.also {
@@ -110,16 +117,41 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
         observeLiveData()
     }
 
+    private fun syncMenu(menu: Menu?) {
+        if (menu == null) return
+        val sp = PreferenceManager.getDefaultSharedPreferences(this)
+
+        when (SettingsFragment.getSortBy(sp)) {
+            FileComparator.SORT_MODE_LAST_MODIFIED ->
+                menu.findItem(R.id.browser_menu_sort_by_last_modified).isChecked = true
+            else -> menu.findItem(R.id.browser_menu_sort_by_name).isChecked = true
+        }
+
+        val hidden = SettingsFragment.getSortShowHidden(sp)
+        menu.findItem(R.id.browser_menu_sort_hidden).isChecked = hidden
+
+        val group = SettingsFragment.getSortGroup(sp)
+        val groupBox = menu.findItem(R.id.browser_menu_folders)
+        when (group) {
+            FileComparator.SORT_MODE_GROUP -> groupBox.isChecked = true
+            else -> groupBox.isChecked = false
+        }
+
+        when (SettingsFragment.getSortOrder(sp)) {
+            FileComparator.SORT_MODE_NORMAL ->
+                menu.findItem(R.id.browser_menu_sort_ascending).isChecked = true
+            else -> menu.findItem(R.id.browser_menu_sort_descending).isChecked = true
+        }
+    }
+
 
     private fun observeLiveData() {
-        val sp = getSharedPreferences("browse_settings", Context.MODE_PRIVATE)
-        val hidden = sp.getBoolean(SORT_SHOW_HIDDEN, true)
-
-        val sortBy = sp.getInt(SORT_BY, FileComparator.SORT_MODE_FILENAME)
-        val group = sp.getInt(SORT_GROUP_FOLDERS, FileComparator.SORT_MODE_GROUP)
-        val order = sp.getInt(SORT_ORDER, FileComparator.SORT_MODE_NORMAL)
+        val sp = PreferenceManager.getDefaultSharedPreferences(this)
+        val hidden = SettingsFragment.getSortShowHidden(sp)
+        val sortBy = SettingsFragment.getSortBy(sp)
+        val group = SettingsFragment.getSortGroup(sp)
+        val order = SettingsFragment.getSortOrder(sp)
         val sortMode = (sortBy or group or order)
-
         viewModel.getFiles().removeObservers(this)
         viewModel.getFiles(hidden, sortMode).observe(this, Observer { updateUI(it) })
         viewModel.getFiles().removeObservers(this)
@@ -129,35 +161,38 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
 
     private fun onMenuItemClick(menuItem: MenuItem): Boolean {
         val id = menuItem.itemId
-        val editor = getSharedPreferences("browse_settings", Context.MODE_PRIVATE).edit()
+        val sp = PreferenceManager.getDefaultSharedPreferences(this)
+        val editor = sp.edit()
         when (id) {
             R.id.browser_menu_sort_by_name -> {
                 menuItem.isChecked = true
-                editor.putInt(SORT_BY, FileComparator.SORT_MODE_FILENAME)
+                editor.putString(SettingsFragment.PREFERENCE_SORTING_BY,
+                        SettingsFragment.PREFERENCE_SORTING_BY_NAME)
             }
             R.id.browser_menu_sort_by_last_modified -> {
                 menuItem.isChecked = true
-                editor.putInt(SORT_BY, FileComparator.SORT_MODE_LAST_MODIFIED)
+                editor.putString(SettingsFragment.PREFERENCE_SORTING_BY,
+                        SettingsFragment.PREFERENCE_SORTING_BY_LAST_MODIFIED)
             }
             R.id.browser_menu_folders -> {
                 val group = !menuItem.isChecked
                 menuItem.isChecked = group
-                val value = if (group) FileComparator.SORT_MODE_GROUP
-                            else FileComparator.SORT_MODE_DO_NOT_GROUP
-                editor.putInt(SORT_GROUP_FOLDERS, value)
+                editor.putBoolean(SettingsFragment.PREFERENCE_SORTING_GROUP, group)
             }
             R.id.browser_menu_sort_hidden -> {
                 val showHidden = !menuItem.isChecked
                 menuItem.isChecked = showHidden
-                editor.putBoolean(SORT_SHOW_HIDDEN, menuItem.isChecked)
+                editor.putBoolean(SettingsFragment.PREFERENCE_SORTING_SHOW_HIDDEN, showHidden)
             }
             R.id.browser_menu_sort_ascending -> {
                 menuItem.isChecked = true
-                editor.putInt(SORT_ORDER, FileComparator.SORT_MODE_NORMAL)
+                editor.putString(SettingsFragment.PREFERENCE_SORTING_ORDER,
+                        SettingsFragment.PREFERENCE_SORTING_ORDER_NORMAL)
             }
             R.id.browser_menu_sort_descending -> {
                 menuItem.isChecked = true
-                editor.putInt(SORT_ORDER, FileComparator.SORT_MODE_REVERSED)
+                editor.putString(SettingsFragment.PREFERENCE_SORTING_ORDER,
+                        SettingsFragment.PREFERENCE_SORTING_ORDER_REVERSED)
             }
             R.id.browser_menu_settings -> {
                 startActivity(Intent(this, SettingsActivity::class.java))

@@ -29,18 +29,18 @@
         android:title="Sorting">
 
         <ListPreference
-            android:key="settings_sorting_sort_by"
+            android:key="settings_sorting_by"
             android:title="Sort by"
             app:useSimpleSummaryProvider="true"
-            android:defaultValue="1"
-            android:entries="@array/settings_sorting_sort_by_entries"
-            android:entryValues="@array/settings_sorting_sort_by_values" />
+            android:defaultValue="name"
+            android:entries="@array/settings_sorting_by_entries"
+            android:entryValues="@array/settings_sorting_by_values" />
 
         <ListPreference
             android:key="settings_sorting_order"
             android:title="Sort order"
             app:useSimpleSummaryProvider="true"
-            android:defaultValue="1"
+            android:defaultValue="ascending"
             android:entries="@array/settings_sorting_order_entries"
             android:entryValues="@array/settings_sorting_order_values" />
 

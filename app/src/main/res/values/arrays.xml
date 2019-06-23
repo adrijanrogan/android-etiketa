@@ -11,13 +11,13 @@
         <item>3</item>
     </string-array>
 
-    <string-array name="settings_sorting_sort_by_entries">
+    <string-array name="settings_sorting_by_entries">
         <item>Name</item>
         <item>Last modified</item>
     </string-array>
-    <string-array name="settings_sorting_sort_by_values">
-        <item>1</item>
-        <item>2</item>
+    <string-array name="settings_sorting_by_values">
+        <item>name</item>
+        <item>last_modified</item>
     </string-array>
 
     <string-array name="settings_sorting_order_entries">
@@ -25,8 +25,8 @@
         <item>Descending</item>
     </string-array>
     <string-array name="settings_sorting_order_values">
-        <item>1</item>
-        <item>2</item>
+        <item>normal</item>
+        <item>reversed</item>
     </string-array>
 
 </resources>
