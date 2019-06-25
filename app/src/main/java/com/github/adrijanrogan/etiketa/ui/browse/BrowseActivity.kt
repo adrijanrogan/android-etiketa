@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.Fade
+import androidx.transition.TransitionManager
 import com.github.adrijanrogan.etiketa.R
 import com.github.adrijanrogan.etiketa.jni.FlacReader
 import com.github.adrijanrogan.etiketa.jni.Metadata
@@ -206,10 +207,16 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
 
     override fun onClickFile(file: File) {
         if (file.isDirectory) {
+            showLoadingView(true)
             viewModel.toChildrenFiles(file)
         } else {
             checkFile(file)
         }
+    }
+
+    private fun showLoadingView(show: Boolean) {
+        progress_parent.visibility = if (show) View.VISIBLE else View.GONE
+        browser_recycler.visibility = if (show) View.GONE else View.VISIBLE
     }
 
     override fun showFileInfoDialog(file: File) {
@@ -223,12 +230,13 @@ class BrowseActivity : AppCompatActivity(), BrowserCallback, BrowserBarCallback 
     }
 
     private fun updateUI(files: List<File>) {
+        showLoadingView(false)
         if (files.isEmpty()) {
-            androidx.transition.TransitionManager.beginDelayedTransition(browser_root_view, Fade())
+            TransitionManager.beginDelayedTransition(browser_root_view, Fade())
             browser_recycler.visibility = View.GONE
             text_no_files.visibility = View.VISIBLE
         } else {
-            androidx.transition.TransitionManager.beginDelayedTransition(browser_root_view, Fade())
+            TransitionManager.beginDelayedTransition(browser_root_view, Fade())
             text_no_files.visibility = View.GONE
             browser_recycler.visibility = View.VISIBLE
             recyclerAdapter.submitList(files)
