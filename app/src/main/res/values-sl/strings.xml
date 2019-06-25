@@ -30,8 +30,8 @@
     <string name="tag_editor">Urejevalec značk</string>
     <string name="unable_to_read">Te datoteke ni možno prebrati</string>
     <string name="format_unsupported">Ta datotečni format ni podprt</string>
-    <string name="name_ascending">Ime naraščajoče</string>
-    <string name="name_descending">Ime padajoče</string>
+    <string name="ascending">Naraščajoče</string>
+    <string name="descending">Padajoče</string>
     <string name="group_folders">Združi mape</string>
     <string name="show_hidden">Pokaži skrite datoteke</string>
     <string name="sort_order">Razvrščanje</string>

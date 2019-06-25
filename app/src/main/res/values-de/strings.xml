@@ -29,8 +29,8 @@
     <string name="format_unsupported">Dieses Dateiformat wird nicht unterstüzt</string>
     <string name="unable_to_read">Dieses Datei kann nicht gelesen werden</string>
     <string name="group_folders">Ordner grupieren</string>
-    <string name="name_ascending">Name aufsteigend</string>
-    <string name="name_descending">Name absteigend</string>
+    <string name="ascending">Aufsteigend</string>
+    <string name="descending">Absteigend</string>
     <string name="sort_order">Sortierreihenfolge</string>
     <string name="show_hidden">Versteckte Dateien anzeigen</string>
     <string name="file_name">Dateiname</string>
